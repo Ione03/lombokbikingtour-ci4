@@ -9,6 +9,7 @@ $routes->get('/', 'Utama::index');
 $routes->get('/package-filter/(:any)', 'Utama::packageFilter/$1');
 
 $routes->get('/admin', 'Admin::index');
+$routes->get('/admin/status/(:num)', 'Admin::index/$1');
 $routes->get('/admin/login', 'Admin::login');
 $routes->post('/admin/auth', 'Admin::auth');
 $routes->get('/admin/logout', 'Admin::logout');

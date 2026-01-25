@@ -15,12 +15,34 @@ class Admin extends Controller
         helper(['form', 'url']);
     }
 
-    public function index()
+    private function checkSession()
     {
-        if (!session()->get('is_admin')) {
+        $session = session();
+        if (!$session->get('is_admin')) {
+            return false;
+        }
+
+        // Check 5 minutes idle time (300 seconds)
+        $lastActivity = $session->get('last_activity');
+        if ($lastActivity && (time() - $lastActivity > 300)) {
+            $session->destroy();
+            return false;
+        }
+
+        // Update activity timestamp
+        $session->set('last_activity', time());
+        return true;
+    }
+
+    public function index($status = 1) // Default to Active (1) instead of All
+    {
+        if (!$this->checkSession()) {
             return redirect()->to('/admin/login');
         }
-        $data['items'] = $this->utamaModel->findAll();
+        
+        $data['items'] = $this->utamaModel->where('status', $status)->findAll();
+        $data['current_status'] = $status;
+        
         return view('admin/dashboard', $data);
     }
 
@@ -50,9 +72,10 @@ class Admin extends Controller
             return redirect()->to('/admin/login')->with('error', 'Incorrect Captcha');
         }
 
-        // Hardcoded Credentials (PROTOTYPE ONLY - Change for Production)
+        // Hardcoded Credentials
         if ($username === 'admin' && $password === 'admin123') {
             session()->set('is_admin', true);
+            session()->set('last_activity', time()); // Set initial activity
             return redirect()->to('/admin');
         } else {
             return redirect()->to('/admin/login')->with('error', 'Invalid Username or Password');
@@ -67,7 +90,7 @@ class Admin extends Controller
 
     public function edit($id)
     {
-        if (!session()->get('is_admin')) {
+        if (!$this->checkSession()) {
             return redirect()->to('/admin/login');
         }
 
@@ -82,7 +105,7 @@ class Admin extends Controller
 
     public function update($id)
     {
-        if (!session()->get('is_admin')) {
+        if (!$this->checkSession()) {
             return redirect()->to('/admin/login');
         }
 
@@ -111,7 +134,7 @@ class Admin extends Controller
 
     public function delete($id)
     {
-        if (!session()->get('is_admin')) {
+        if (!$this->checkSession()) {
             return redirect()->to('/admin/login');
         }
         // $this->utamaModel->delete($id); // Uncomment to enable
