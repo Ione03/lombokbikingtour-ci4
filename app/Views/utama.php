@@ -97,25 +97,40 @@
             var email = $('#cf-email').val();
             var subject = $('#cf-subject').val();
             var message = $('#cf-message').val();
+            var captchaInput = parseInt($('#cf-captcha').val());
+            var captchaAnswer = parseInt($('#cf-captcha-answer').val());
             
-            if (!name) {
-                alert('Please enter your name');
-                return;
-            }
-            if (!email) {
-                alert('Please enter your email');
-                return;
-            }
-            if (!subject) {
-                alert('Please enter a subject');
-                return;
-            }
-            if (!message) {
-                alert('Please enter a message');
+            if (!name || !email || !subject || !message) {
+                alert('Please fill in all fields.');
                 return;
             }
             
-            // Submit via AJAX (you'll need to create a controller endpoint)
+            // Validate Captcha
+            if (isNaN(captchaInput) || captchaInput !== captchaAnswer) {
+                alert('Wrong captcha answer. Please try again.');
+                return;
+            }
+
+            // Prepare WhatsApp Message
+            var waText = "New Message from Website:\n" +
+                         "Name: " + name + "\n" +
+                         "Email: " + email + "\n" +
+                         "Subject: " + subject + "\n" +
+                         "Message: " + message;
+            
+            var waNumber = "628123456789"; 
+            if ($('#waNumber2').length && $('#waNumber2').val()) {
+                waNumber = $('#waNumber2').val();
+            }
+            
+            // Open WhatsApp
+            window.open("https://api.whatsapp.com/send?phone=" + waNumber + "&text=" + encodeURIComponent(waText), "_blank");
+            
+            // Reset form and regenerate captcha
+            $('#form_feedback')[0].reset();
+            generateCaptcha();
+
+            // Submit via AJAX for internal logging if needed
             $.ajax({
                 url: '<?= base_url("send-contact") ?>',
                 type: 'POST',
@@ -126,15 +141,34 @@
                     message: message
                 },
                 success: function(response) {
-                    alert('Thank you! Your message has been sent successfully.');
-                    $('#form_feedback')[0].reset();
+                    // console.log('Message logged');
                 },
-                error: function() {
-                    alert('Thank you for your interest! We will get back to you soon.');
-                    $('#form_feedback')[0].reset();
-                }
+                error: function() {}
             });
         }
+        
+        // Function to generate random math captcha
+        function generateCaptcha() {
+            var num1 = Math.floor(Math.random() * 10) + 1;
+            var num2 = Math.floor(Math.random() * 10) + 1;
+            var answer = num1 + num2;
+            
+            $('#captcha-question').text(num1 + " + " + num2 + " = ?");
+            $('#cf-captcha-answer').val(answer);
+            
+            // Also update modal captcha if it exists
+            if($('#modal-captcha-answer').length) {
+                var mNum1 = Math.floor(Math.random() * 10) + 1;
+                var mNum2 = Math.floor(Math.random() * 10) + 1;
+                var mAnswer = mNum1 + mNum2;
+                $('#modal-captcha-question').text(mNum1 + " + " + mNum2 + " = ?");
+                $('#modal-captcha-answer').val(mAnswer);
+            }
+        }
+        
+        $(document).ready(function() {
+            generateCaptcha();
+        });
 
         
         function filterPackage(pIdx) {
@@ -342,7 +376,7 @@
             <div class="row package-items">
                 <?php if (isset($value) && is_array($value)): ?>
                     <?php foreach ($value as $item): ?>
-                        <?php // Checking status removed to show all packages ?>
+                        <?php if (isset($item['status']) && $item['status'] == "5"): ?>
                         <?php
                             $tmp = $item['other_teks'] ?? '';
                             $arr = explode(" ", $tmp);
@@ -370,7 +404,7 @@
                                 </div>
                             </div>
                         </div>
-                        <?php // endif; ?>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
@@ -417,6 +451,18 @@
                         <div class="form-group">
                             <label for="bookNote">Note</label>
                             <textarea class="form-control" id="bookNote" rows="3" placeholder="Additional requirements..."></textarea>
+                        </div>
+                        
+                        <!-- Captcha for Booking Modal -->
+                        <div class="form-group">
+                            <label>Verify you are human</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="modal-captcha-question"></span>
+                                </div>
+                                <input type="number" class="form-control" id="modal-captcha" placeholder="Enter result" required>
+                                <input type="hidden" id="modal-captcha-answer">
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -588,6 +634,20 @@
     
     <section id="contact" class="page-section">
         <div class="container">
+            <!-- Map Row (Moved Here) -->
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-12 text-center">
+                    <h2 class="mt-0">Find Us On Map</h2>
+                    <hr class="divider my-3">
+                </div>
+                <div class="col-lg-12">
+                     <div class="map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15783.567117173266!2d116.089856!3d-8.510000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOMKwMzAnMzYuMCJTIDExNsKwMDUnMjMuNSJF!5e0!3m2!1sen!2sid!4v1620000000000!5m2!1sen!2sid" 
+                                width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+
             <div class="row justify-content-center">
                 <div class="col-lg-8 text-center">
                     <h2 class="mt-0"><?= $contact_title ?></h2>
@@ -612,20 +672,28 @@
                             <div class="col-md-12 col-sm-12 mb-3">
                                 <textarea class="form-control" rows="6" id="cf-message" name="message" placeholder="Tell us about your holiday planning" required></textarea>
                             </div>
+                            
+                            <!-- Captcha for Contact Form -->
+                            <div class="col-md-12 col-sm-12 mb-3">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="captcha-question"></span>
+                                    </div>
+                                    <input type="number" class="form-control" id="cf-captcha" placeholder="Enter the result" required>
+                                    <input type="hidden" id="cf-captcha-answer">
+                                </div>
+                            </div>
+                            
                             <div class="col-md-12 col-sm-12">
-                                <button type="button" class="btn btn-primary btn-block" id="cf-submit" onclick="sendFeedback()">Send Message</button>
+                                <button type="button" class="btn btn-primary btn-block" id="cf-submit" onclick="sendFeedback()">
+                                    <i class="fa fa-whatsapp"></i> Send Message
+                                </button>
                             </div>
                         </div>
                     </form>
                 </div>
                 
                 <div class="col-md-4 col-sm-12 mt-4 mt-md-0">
-                    <!-- Google Map -->
-                    <div class="map-container mb-4">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15783.567117173266!2d116.089856!3d-8.510000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOMKwMzAnMzYuMCJTIDExNsKwMDUnMjMuNSJF!5e0!3m2!1sen!2sid!4v1620000000000!5m2!1sen!2sid" 
-                                width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                    </div>
-
                     <div class="contact-info">
                         <?php if ($addr_telp): ?>
                         <div class="mb-4">
@@ -693,7 +761,15 @@
                     <a class="footer-social-link" href="#"><i class="fa fa-twitter"></i></a>
                 </div>
             </div>
-            <div class="small text-center text-muted mt-5">Copyright &copy; 2026 - LombokBikingTour.com</div>
+            <div class="small text-center text-muted mt-5">
+                Copyright &copy; 2026 - LombokBikingTour.com<br>
+                <span class="d-block mt-2">
+                    <?php if ($addr_telp): ?>Phone: <?= $addr_telp ?> | <?php endif; ?>
+                    <?php if ($addr_wa): ?>WhatsApp: <?= $addr_wa ?> | <?php endif; ?>
+                    <?php if ($addr_email): ?>Email: <?= $addr_email ?> | <?php endif; ?>
+                    <?php if ($addr_location): ?>Address: <?= $addr_location ?><?php endif; ?>
+                </span>
+            </div>
         </div>
     </footer>
 
@@ -799,10 +875,17 @@
             var bikeNumber = $('#bikeNumber').val();
             var note = $('#bookNote').val();
             var packageTitle = $('#modalPackageTitle').text();
-            var packageId = $('#modalPackageTitle').text(); // Or get from data attribute if needed
+            var captchaInput = parseInt($('#modal-captcha').val());
+            var captchaAnswer = parseInt($('#modal-captcha-answer').val());
             
             if (!date) {
                 alert('Please select a date.');
+                return;
+            }
+            
+            // Validate Captcha
+            if (isNaN(captchaInput) || captchaInput !== captchaAnswer) {
+                alert('Wrong captcha answer. Please try again.');
                 return;
             }
             
@@ -813,15 +896,22 @@
                        "Number of Bikes: " + bikeNumber + "\n" +
                        "Note: " + note;
             
-            var waNumber = "628123456789"; // Replace with your actual WA number
-            // Try to find dynamic number from hidden input if available
+            var waNumber = "628123456789"; 
             if ($('#waNumber2').length && $('#waNumber2').val()) {
                 waNumber = $('#waNumber2').val();
             }
             
             var url = "https://api.whatsapp.com/send?phone=" + waNumber + "&text=" + encodeURIComponent(text);
             window.open(url, '_blank');
+            
+            // Regenerate captcha
+            generateCaptcha();
         }
+        
+        // Regenerate captcha when modal opens
+        $('#packageModal').on('show.bs.modal', function () {
+             generateCaptcha(); 
+        });
     </script>
 
     <!-- Scroll to Top Button-->
