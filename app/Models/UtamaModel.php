@@ -43,7 +43,6 @@ class UtamaModel extends Model
         }
         
         return $builder->orderBy('RAND()')
-                      ->limit(9)
                       ->get()
                       ->getResult();
     }
