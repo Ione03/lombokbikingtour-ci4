@@ -8,7 +8,7 @@ class UtamaModel extends Model
 {
     protected $table = 'm_teks';
     protected $primaryKey = 'kd_teks';
-    protected $allowedFields = ['kd_teks', 'teks', 'status', 'group_data'];
+    protected $allowedFields = ['kd_teks', 'teks', 'other_teks', 'img', 'status', 'group_data', 'last_update'];
     
     /**
      * Get data by ID
