@@ -22,6 +22,9 @@
     
     <!-- Package Cards CSS -->
     <link href="<?= base_url('assets/themes/css/package-cards.css') ?>" rel="stylesheet">
+
+    <!-- Custom Main CSS -->
+    <link href="<?= base_url('assets/css/style.css') ?>" rel="stylesheet">
     
     <!-- Custom Styles -->
     <style>
@@ -380,7 +383,7 @@
                         <?php
                             $tmp = $item['other_teks'] ?? '';
                             $arr = explode(" ", $tmp);
-                            $tmp_text = implode(' ', array_slice($arr, 0, 20));
+                            $tmp_text = implode(' ', array_slice($arr, 0, 40));
                         ?>
                         <div class="col-sm-6 col-lg-4 mb-4">
                             <div class="card package-card" 
@@ -675,13 +678,14 @@
                             
                             <!-- Captcha for Contact Form -->
                             <div class="col-md-12 col-sm-12 mb-3">
+                                <label class="text-muted small mb-1">Verify you are human</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="captcha-question"></span>
                                     </div>
-                                    <input type="number" class="form-control" id="cf-captcha" placeholder="Enter the result" required>
-                                    <input type="hidden" id="cf-captcha-answer">
+                                    <input type="number" class="form-control" id="cf-captcha" placeholder="Total?" required>
                                 </div>
+                                <input type="hidden" id="cf-captcha-answer">
                             </div>
                             
                             <div class="col-md-12 col-sm-12">
@@ -915,7 +919,7 @@
     </script>
 
     <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded js-scroll-trigger" href="#page-top">
+    <a class="scroll-to-top rounded" href="#page-top">
         <i class="fa fa-angle-up"></i>
     </a>
     
@@ -927,6 +931,12 @@
             } else {
                 $('.scroll-to-top').fadeOut();
             }
+        });
+
+        // Smooth scroll for scroll to top
+        $('.scroll-to-top').click(function(e) {
+            e.preventDefault();
+            $('html, body').animate({scrollTop: 0}, 1000, 'easeInOutExpo');
         });
     </script>
     

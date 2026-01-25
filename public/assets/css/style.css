@@ -31,7 +31,8 @@ label {
 }
 
 a {
-    color: #999999 transition: 0.5s all;
+    color: #999999;
+    transition: 0.5s all;
     -webkit-transition: 0.5s all;
     -moz-transition: 0.5s all;
     -o-transition: 0.5s all;
@@ -53,7 +54,8 @@ a:hover {
 .wrap_header {
     width: 100%;
     margin: 1em top 0;
-    border-bottom: 1px solid #999999; // #dcdcdc;
+    border-bottom: 1px solid #999999;
+    /* #dcdcdc; */
 }
 
 /*--profile start here--0.62*/
@@ -87,14 +89,15 @@ h2 {
 
 #pre-header {
     color: rgba(0, 0, 0, 0.4);
-    border-bottom: 1px solid grey; // rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid grey;
+    /* rgba(255, 255, 255, 0.8); */
     box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.06);
     padding: 1em;
 }
 
 .background-gray-lighter {
     background-color: rgba(0, 0, 0, 0.90);
-    #0cdfea; //  #7ee0ea; // #e6e6e6;
+    /* #0cdfea; #7ee0ea; #e6e6e6; */
 }
 
 select option {
@@ -251,4 +254,138 @@ select option {
 .footer-social-link:hover {
     background-color: #d94c25;
     color: white;
+}
+
+/* Navbar Toggler Border Removal */
+.navbar-toggler {
+    border: none !important;
+    outline: none !important;
+}
+
+.navbar-toggler:focus {
+    outline: none !important;
+}
+
+/* Hero Subtitle Width */
+.masthead-slide p {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* About Us Image Rounded */
+#about img {
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Contact Info No Wrap */
+.contact-info .btn-link {
+    display: flex !important;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.contact-info .btn-link p {
+    margin-bottom: 0;
+    margin-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.contact-info .btn-link i {
+    width: 30px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Transparent Navbar */
+#mainNav {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding-top: 20px;
+    transition: all 0.3s;
+}
+
+#mainNav.navbar-scrolled {
+    background-color: #fff !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#mainNav.navbar-scrolled .navbar-brand {
+    color: #f4623a;
+}
+
+#mainNav.navbar-scrolled .nav-link {
+    color: #212529;
+}
+
+/* Adjust navbar items color for transparent state (assuming dark background slide) */
+#mainNav:not(.navbar-scrolled) .navbar-brand {
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#mainNav:not(.navbar-scrolled) .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+#mainNav:not(.navbar-scrolled) .nav-link:hover {
+    color: #f4623a;
+}
+
+/* Mobile Menu styling for transparent navbar */
+@media (max-width: 991px) {
+    #mainNav {
+        background-color: #fff !important;
+        /* Always white on mobile for readability */
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    #mainNav .navbar-brand {
+        color: #f4623a !important;
+        text-shadow: none !important;
+    }
+
+    #mainNav .nav-link {
+        color: #212529 !important;
+        text-shadow: none !important;
+    }
+
+    #mainNav .nav-link {
+        color: #212529 !important;
+        text-shadow: none !important;
+    }
+}
+
+/* Captcha Styling */
+.input-group-text {
+    background-color: #f4623a;
+    color: white;
+    border: none;
+    font-weight: bold;
+    min-width: 100px;
+    justify-content: center;
+}
+
+#cf-captcha,
+#modal-captcha {
+    height: auto;
+    border-radius: 0 5px 5px 0;
+}
+
+/* Remove Arrows from Number Input */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
 }

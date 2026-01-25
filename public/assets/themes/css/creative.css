@@ -4250,7 +4250,7 @@ input[type="button"].btn-block {
 
 .navbar-light .navbar-toggler {
   color: rgba(0, 0, 0, 0.9);
-  border-color: rgba(0, 0, 0, 0.9);
+  /* border-color: rgba(0, 0, 0, 0.9); */
 }
 
 .navbar-light .navbar-toggler-icon {
