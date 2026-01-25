@@ -175,6 +175,7 @@
     font-weight: 600;
     transition: all 0.3s ease;
     margin: 5px;
+    padding: 5px 20px
 }
 
 #package .btn-group .btn:hover {

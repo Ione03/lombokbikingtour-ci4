@@ -84,177 +84,15 @@
         }
     </style>
     
-    <script type="text/javascript">
-        function openWA() {
-            var number = document.getElementById("waNumber").value;
-            window.open("https://api.whatsapp.com/send?phone=" + number + "&text=Hi, I contacted you through your website.", "_blank");
-        }
-        
-        function openWA2() {
-            var number = document.getElementById("waNumber2").value;
-            window.open("https://api.whatsapp.com/send?phone=" + number + "&text=Hi, I contacted you through your website.", "_blank");
-        }
-        
-        function sendFeedback() {
-            var name = $('#cf-name').val();
-            var email = $('#cf-email').val();
-            var subject = $('#cf-subject').val();
-            var message = $('#cf-message').val();
-            var captchaInput = parseInt($('#cf-captcha').val());
-            var captchaAnswer = parseInt($('#cf-captcha-answer').val());
-            
-            if (!name || !email || !subject || !message) {
-                alert('Please fill in all fields.');
-                return;
-            }
-            
-            // Validate Captcha
-            if (isNaN(captchaInput) || captchaInput !== captchaAnswer) {
-                alert('Wrong captcha answer. Please try again.');
-                return;
-            }
 
-            // Prepare WhatsApp Message
-            var waText = "New Message from Website:\n" +
-                         "Name: " + name + "\n" +
-                         "Email: " + email + "\n" +
-                         "Subject: " + subject + "\n" +
-                         "Message: " + message;
-            
-            var waNumber = "628123456789"; 
-            if ($('#waNumber2').length && $('#waNumber2').val()) {
-                waNumber = $('#waNumber2').val();
-            }
-            
-            // Open WhatsApp
-            window.open("https://api.whatsapp.com/send?phone=" + waNumber + "&text=" + encodeURIComponent(waText), "_blank");
-            
-            // Reset form and regenerate captcha
-            $('#form_feedback')[0].reset();
-            generateCaptcha();
-
-            // Submit via AJAX for internal logging if needed
-            $.ajax({
-                url: '<?= base_url("send-contact") ?>',
-                type: 'POST',
-                data: {
-                    name: name,
-                    email: email,
-                    subject: subject,
-                    message: message
-                },
-                success: function(response) {
-                    // console.log('Message logged');
-                },
-                error: function() {}
-            });
-        }
-        
-        // Function to generate random math captcha
-        function generateCaptcha() {
-            var num1 = Math.floor(Math.random() * 10) + 1;
-            var num2 = Math.floor(Math.random() * 10) + 1;
-            var answer = num1 + num2;
-            
-            $('#captcha-question').text(num1 + " + " + num2 + " = ?");
-            $('#cf-captcha-answer').val(answer);
-            
-            // Also update modal captcha if it exists
-            if($('#modal-captcha-answer').length) {
-                var mNum1 = Math.floor(Math.random() * 10) + 1;
-                var mNum2 = Math.floor(Math.random() * 10) + 1;
-                var mAnswer = mNum1 + mNum2;
-                $('#modal-captcha-question').text(mNum1 + " + " + mNum2 + " = ?");
-                $('#modal-captcha-answer').val(mAnswer);
-            }
-        }
-        
-        $(document).ready(function() {
-            generateCaptcha();
-        });
-
-        
-        function filterPackage(pIdx) {
-            var url1 = "<?= base_url('package-filter/') ?>" + pIdx;
-            console.log('Filtering packages with index:', pIdx);
-            console.log('API URL:', url1);
-            
-            // Add loading state
-            $(".package-items").addClass('loading');
-            
-            $.ajax({
-                url: url1,
-                type: "GET",
-                dataType: "JSON",
-                success: function(json) {
-                    console.log('Received data:', json);
-                    $(".package-items").empty().removeClass('loading');
-                    
-                    if (json && json.length > 0) {
-                        $.each(json, function(i, value) {
-                            var tmp = value.other_teks || '';
-                            var arr = tmp.split(" ");
-                            var tmp_text = arr.slice(0, 20).join(' ');
-                            var imgUrl = "<?= base_url('assets/themes/images/') ?>" + value.img;
-                            var packageUrl = "<?= base_url('package/') ?>" + value.kd_teks;
-                            
-                            var cardHtml = 
-                                '<div class="col-sm-6 col-lg-4 mb-4">' +
-                                '    <div class="card package-card" ' +
-                                '         data-toggle="modal" ' +
-                                '         data-target="#packageModal"' +
-                                '         data-package-id="' + value.kd_teks + '"' +
-                                '         data-package-title="' + (value.teks || '').replace(/"/g, '&quot;') + '"' +
-                                '         data-package-description="' + (value.other_teks || '').replace(/"/g, '&quot;') + '"' +
-                                '         data-package-image="' + imgUrl + '">' +
-                                '        <div class="package-card-img-container">' +
-                                '            <img src="' + imgUrl + '" class="package-card-img" alt="' + (value.teks || '').replace(/"/g, '&quot;') + '">' +
-                                '            <span class="package-badge">#' + value.kd_teks + '</span>' +
-                                '        </div>' +
-                                '        <div class="card-body">' +
-                                '            <h5 class="card-title">' + value.teks + '</h5>' +
-                                '            <p class="card-text">' + tmp_text + '...</p>' +
-                                '            <button class="btn btn-view-details">View Details</button>' +
-                                '        </div>' +
-                                '        <div class="card-footer">' +
-                                '            <small class="text-muted"><i class="fa fa-clock-o"></i> Updated <span class="human-date" data-date="' + (value.last_update || '') + '">' + (value.last_update || 'recently') + '</span></small>' +
-                                '        </div>' +
-                                '    </div>' +
-                                '</div>';
-                            
-                            $(".package-items").append(cardHtml);
-                        });
-                    } else {
-                        $(".package-items").html(
-                            '<div class="col-12 text-center py-5">' +
-                            '<p class="text-white h4">No packages found for this category.</p>' +
-                            '</div>'
-                        );
-                    }
-                    
-                    // Format human-readable dates after loading
-                    formatHumanDate();
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', status, error);
-                    console.error('Response:', xhr.responseText);
-                    $(".package-items").removeClass('loading').html(
-                        '<div class="col-12 text-center py-5">' +
-                        '<p class="text-white h4">Error loading packages. Please try again.</p>' +
-                        '</div>'
-                    );
-                }
-            });
-        }
-    </script>
 </head>
 
 <body id="page-top">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
         <div class="container">
-            <a class="navbar-brand js-scroll-trigger" href="#page-top">
-                <img height="40" src="<?= base_url('assets/themes/img/Logo.png') ?>"> Lombok Biking Tour</a>
+            <a class="navbar-brand js-scroll-trigger" href="/">
+                <img height="40" src="<?= base_url('assets/themes/img/Logo.png') ?>"><span class="align-bottom">&nbsp; Lombok Biking Tour</span></a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -678,12 +516,12 @@
                             
                             <!-- Captcha for Contact Form -->
                             <div class="col-md-12 col-sm-12 mb-3">
-                                <label class="text-muted small mb-1">Verify you are human</label>
+                                <label class="text-white small mb-1" style="display:block;">Verify you are human:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text" id="captcha-question"></span>
+                                        <span class="input-group-text" id="captcha-question" style="background:#f4623a; color:white; min-width:80px; justify-content:center;">? + ?</span>
                                     </div>
-                                    <input type="number" class="form-control" id="cf-captcha" placeholder="Total?" required>
+                                    <input type="number" class="form-control" id="cf-captcha" placeholder="Total?" required style="height:auto;">
                                 </div>
                                 <input type="hidden" id="cf-captcha-answer">
                             </div>
@@ -889,7 +727,7 @@
             
             // Validate Captcha
             if (isNaN(captchaInput) || captchaInput !== captchaAnswer) {
-                alert('Wrong captcha answer. Please try again.');
+                alert('Access Denied: Incorrect Captcha Answer! Please try again.');
                 return;
             }
             
@@ -963,7 +801,158 @@
             $('#videoModal').on('hidden.bs.modal', function () {
                 $('#videoIframe').attr('src', '');
             });
+            
+            // Initialize Captcha on load
+            generateCaptcha();
         });
+
+        // Custom Functions
+        function openWA() {
+            var number = document.getElementById("waNumber").value;
+            window.open("https://api.whatsapp.com/send?phone=" + number + "&text=Hi, I contacted you through your website.", "_blank");
+        }
+        
+        function openWA2() {
+            var number = document.getElementById("waNumber2").value;
+            window.open("https://api.whatsapp.com/send?phone=" + number + "&text=Hi, I contacted you through your website.", "_blank");
+        }
+        
+        function sendFeedback() {
+            var name = $('#cf-name').val();
+            var email = $('#cf-email').val();
+            var subject = $('#cf-subject').val();
+            var message = $('#cf-message').val();
+            var captchaInput = parseInt($('#cf-captcha').val());
+            var captchaAnswer = parseInt($('#cf-captcha-answer').val());
+            
+            if (!name || !email || !subject || !message) {
+                alert('Please fill in all required fields.'); 
+                return;
+            }
+
+            // Validate Email
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            
+            // Validate Captcha
+            if (isNaN(captchaInput) || captchaInput !== captchaAnswer) {
+                alert('Access Denied: Incorrect Captcha Answer! Please try again.');
+                $('#cf-captcha').addClass('is-invalid');
+                return;
+            }
+            $('#cf-captcha').removeClass('is-invalid');
+
+            // Prepare WhatsApp Message
+            var waText = "New Message from Website:\n" +
+                         "Name: " + name + "\n" +
+                         "Email: " + email + "\n" +
+                         "Subject: " + subject + "\n" +
+                         "Message: " + message;
+            
+            var waNumber = "628123456789"; 
+            if ($('#waNumber2').length && $('#waNumber2').val()) {
+                waNumber = $('#waNumber2').val();
+            }
+            
+            // Open WhatsApp
+            window.open("https://api.whatsapp.com/send?phone=" + waNumber + "&text=" + encodeURIComponent(waText), "_blank");
+            
+            // Reset form and regenerate captcha
+            $('#form_feedback')[0].reset();
+            generateCaptcha();
+
+            // Submit via AJAX
+            $.ajax({
+                url: '<?= base_url("send-contact") ?>',
+                type: 'POST',
+                data: {
+                    name: name,
+                    email: email,
+                    subject: subject,
+                    message: message
+                },
+                success: function(response) {},
+                error: function() {}
+            });
+        }
+        
+        // Function to generate random math captcha
+        function generateCaptcha() {
+            var num1 = Math.floor(Math.random() * 10) + 1;
+            var num2 = Math.floor(Math.random() * 10) + 1;
+            var answer = num1 + num2;
+            
+            // Update Contact Form Captcha
+            if ($('#captcha-question').length) {
+                $('#captcha-question').text(num1 + " + " + num2 + " = ?");
+                $('#cf-captcha-answer').val(answer);
+            }
+            
+            // Update Modal Validation Captcha
+            var mNum1 = Math.floor(Math.random() * 10) + 1;
+            var mNum2 = Math.floor(Math.random() * 10) + 1;
+            var mAnswer = mNum1 + mNum2;
+            
+            if ($('#modal-captcha-question').length) {
+                $('#modal-captcha-question').text(mNum1 + " + " + mNum2 + " = ?");
+                $('#modal-captcha-answer').val(mAnswer);
+            }
+        }
+        
+        function filterPackage(pIdx) {
+            var url1 = "<?= base_url('package-filter/') ?>" + pIdx;
+            // Add loading state
+            $(".package-items").addClass('loading');
+            $.ajax({
+                url: url1,
+                type: "GET",
+                dataType: "JSON",
+                success: function(json) {
+                    $(".package-items").empty().removeClass('loading');
+                    if (json && json.length > 0) {
+                        $.each(json, function(i, value) {
+                            var tmp = value.other_teks || '';
+                            var arr = tmp.split(" ");
+                            var tmp_text = arr.slice(0, 40).join(' ');
+                            var imgUrl = "<?= base_url('assets/themes/images/') ?>" + value.img;
+                            var cardHtml = 
+                                '<div class="col-sm-6 col-lg-4 mb-4">' +
+                                '    <div class="card package-card" ' +
+                                '         data-toggle="modal" ' +
+                                '         data-target="#packageModal"' +
+                                '         data-package-id="' + value.kd_teks + '"' +
+                                '         data-package-title="' + (value.teks || '').replace(/"/g, '&quot;') + '"' +
+                                '         data-package-description="' + (value.other_teks || '').replace(/"/g, '&quot;') + '"' +
+                                '         data-package-image="' + imgUrl + '">' +
+                                '        <div class="package-card-img-container">' +
+                                '            <img src="' + imgUrl + '" class="package-card-img" alt="' + (value.teks || '').replace(/"/g, '&quot;') + '">' +
+                                '            <span class="package-badge">#' + value.kd_teks + '</span>' +
+                                '        </div>' +
+                                '        <div class="card-body">' +
+                                '            <h5 class="card-title">' + value.teks + '</h5>' +
+                                '            <p class="card-text">' + tmp_text + '...</p>' +
+                                '            <button class="btn btn-view-details">View Details</button>' +
+                                '        </div>' +
+                                '        <div class="card-footer">' +
+                                '            <small class="text-muted"><i class="fa fa-clock-o"></i> Updated <span class="human-date" data-date="' + (value.last_update || '') + '">' + (value.last_update || 'recently') + '</span></small>' +
+                                '        </div>' +
+                                '    </div>' +
+                                '</div>';
+                            $(".package-items").append(cardHtml);
+                        });
+                    } else {
+                        $(".package-items").html('<div class="col-12 text-center py-5"><p class="text-white h4">No packages found for this category.</p></div>');
+                    }
+                    formatHumanDate();
+                },
+                error: function(xhr, status, error) {
+                    $(".package-items").removeClass('loading').html('<div class="col-12 text-center py-5"><p class="text-white h4">Error loading packages. Please try again.</p></div>');
+                }
+            });
+        }
     </script>
 </body>
 </html>
