@@ -593,7 +593,11 @@
                         <li><a class="js-scroll-trigger" href="#page-top">Home</a></li>
                         <li><a class="js-scroll-trigger" href="#package">Packages</a></li>
                         <li><a class="js-scroll-trigger" href="#galery">Gallery</a></li>
-                        <li><a class="js-scroll-trigger" href="#contact">Contact</a></li>                        
+                        <li><a class="js-scroll-trigger" href="#contact">Contact</a></li>
+                        <li><a href="<?= base_url('page/payment') ?>">Payment</a></li>
+                        <li><a href="<?= base_url('page/privacy-policy') ?>">Privacy Policy</a></li>
+                        <li><a href="<?= base_url('page/term-of-use') ?>">Term of Use</a></li>
+                        <li><a href="<?= base_url('page/faq') ?>">FAQ</a></li>                        
                     </ul>
                 </div>
                 <div class="col-lg-3 ">

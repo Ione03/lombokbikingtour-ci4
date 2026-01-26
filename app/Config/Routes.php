@@ -18,3 +18,4 @@ $routes->post('/admin/store', 'Admin::store');
 $routes->get('/admin/edit/(:any)', 'Admin::edit/$1');
 $routes->post('/admin/update/(:any)', 'Admin::update/$1');
 $routes->get('/admin/delete/(:any)', 'Admin::delete/$1');
+$routes->get('/page/(:any)', 'Page::index/$1');
