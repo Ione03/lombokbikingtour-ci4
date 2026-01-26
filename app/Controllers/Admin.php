@@ -98,6 +98,23 @@ class Admin extends Controller
         if ($img && $img->isValid() && !$img->hasMoved()) {
             $imgName = $img->getRandomName();
             $img->move(FCPATH . 'assets/themes/images', $imgName);
+            
+            // Smart Crop Logic
+            $db = \Config\Database::connect();
+            $query = $db->query("SELECT img_width, img_height FROM g_settings WHERE kd_teks = 'S04' LIMIT 1");
+            $settings = $query->getRow();
+            
+            if ($settings && !empty($settings->img_width) && !empty($settings->img_height)) {
+                try {
+                    $image = \Config\Services::image();
+                    $image->withFile(FCPATH . 'assets/themes/images/' . $imgName)
+                          ->fit($settings->img_width, $settings->img_height, 'center')
+                          ->save(FCPATH . 'assets/themes/images/' . $imgName);
+                } catch (\Exception $e) {
+                    // Log error or continue if image processing fails
+                    log_message('error', 'Image processing failed: ' . $e->getMessage());
+                }
+            }
         }
         
         // Generate a simple ID if not provided? Model says primaryKey = kd_teks.
@@ -191,9 +208,27 @@ class Admin extends Controller
         $imgName = $this->request->getPost('old_img');
 
         // Handle Image Upload
+        // Handle Image Upload
         if ($img && $img->isValid() && !$img->hasMoved()) {
             $imgName = $img->getRandomName();
             $img->move(FCPATH . 'assets/themes/images', $imgName);
+            
+            // Smart Crop Logic
+            $db = \Config\Database::connect();
+            $query = $db->query("SELECT img_width, img_height FROM g_settings LIMIT 1");
+            $settings = $query->getRow();
+            
+            if ($settings && !empty($settings->img_width) && !empty($settings->img_height)) {
+                try {
+                    $image = \Config\Services::image();
+                    $image->withFile(FCPATH . 'assets/themes/images/' . $imgName)
+                          ->fit($settings->img_width, $settings->img_height, 'center')
+                          ->save(FCPATH . 'assets/themes/images/' . $imgName);
+                } catch (\Exception $e) {
+                    // Log error or continue if image processing fails
+                    log_message('error', 'Image processing failed: ' . $e->getMessage());
+                }
+            }
         }
 
         $data = [
