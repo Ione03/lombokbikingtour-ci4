@@ -47,6 +47,7 @@
                                     <option value="1" <?= $item['status'] == 1 ? 'selected' : '' ?>>1 (Active/Normal)</option>
                                     <option value="0" <?= $item['status'] == 0 ? 'selected' : '' ?>>0 (Hidden)</option>
                                     <option value="5" <?= $item['status'] == 5 ? 'selected' : '' ?>>5 (Package/Featured)</option>
+                                    <option value="6" <?= $item['status'] == 6 ? 'selected' : '' ?>>6 (Page/Information)</option>
                                 </select>
                             </div>
                         </div>

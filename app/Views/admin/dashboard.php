@@ -17,6 +17,7 @@
     <nav class="navbar navbar-dark bg-dark mb-4">
         <a class="navbar-brand" href="#">Lombok Biking Tour Admin</a>
         <div>
+            <a href="https://www.histats.com/viewstats/?act=2&sid=5005008" class="btn btn-outline-light btn-sm mr-2" target="_blank">Website Visitor</a>
             <a href="<?= base_url() ?>" class="btn btn-outline-light btn-sm mr-2" target="_blank">View Site</a>
             <a href="<?= base_url('admin/logout') ?>" class="btn btn-danger btn-sm">Logout</a>
         </div>
@@ -38,11 +39,14 @@
                         <a href="<?= base_url('admin/status/0') ?>" class="btn btn-sm btn-light <?= $current_status === '0' ? 'active font-weight-bold' : '' ?>">Basic Information</a>
                         <a href="<?= base_url('admin/status/1') ?>" class="btn btn-sm btn-light <?= $current_status == 1 ? 'active font-weight-bold' : '' ?>">Gallery</a>                        
                         <a href="<?= base_url('admin/status/5') ?>" class="btn btn-sm btn-light <?= $current_status == 5 ? 'active font-weight-bold' : '' ?>">Packages</a>
+                        <a href="<?= base_url('admin/status/6') ?>" class="btn btn-sm btn-light <?= $current_status == 6 ? 'active font-weight-bold' : '' ?>">Pages</a>
                     </div>
                     <?php if ($current_status == 5): ?>
                         <button type="button" class="btn btn-sm btn-success btn-add-package"><i class="fas fa-plus"></i> Add Package</button>
                     <?php elseif ($current_status == 1): ?>
                         <button type="button" class="btn btn-sm btn-success btn-add-gallery"><i class="fas fa-plus"></i> Add Create New Gallery</button>
+                    <?php elseif ($current_status == 6): ?>
+                        <button type="button" class="btn btn-sm btn-success btn-add-page"><i class="fas fa-plus"></i> Add New Page</button>
                     <?php endif; ?>
                 </div>
             </div>
@@ -102,7 +106,7 @@
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm mb-1 btn-edit-package" data-item='<?= htmlspecialchars(json_encode($item), ENT_QUOTES, 'UTF-8') ?>'><i class="fas fa-edit"></i></button>
-                                    <?php if ($item['status'] == 5 || $item['status'] == 1): ?> <!-- Allow delete for packages and gallery -->
+                                    <?php if ($item['status'] == 5 || $item['status'] == 1 || $item['status'] == 6): ?> <!-- Allow delete for packages, gallery, and pages -->
                                     <a href="<?= base_url('admin/delete/' . $item['kd_teks']) ?>" class="btn btn-danger btn-sm mb-1" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fas fa-trash"></i></a>
                                     <?php endif; ?>
                                 </td>
@@ -152,6 +156,7 @@
                                 <option value="1">1 (Active/Normal)</option>
                                 <option value="0">0 (Hidden)</option>
                                 <option value="5">5 (Package/Featured)</option>
+                                <option value="6">6 (Page/Information)</option>
                             </select>
                         </div>
                     </div>
@@ -261,6 +266,35 @@
                 $('#current-img-container').addClass('d-none');
                 $('#old_img').val('');
                 $('.custom-file-label').html('Choose new image...');
+                
+                // Clear CKEditor 5
+                if (editorInstance) {
+                    editorInstance.setData('');
+                }
+
+                $('#crudModal').modal('show');
+            });
+
+            // Add Page Button
+            $('.btn-add-page').click(function() {
+                $('#crudModalLabel').text('Create New Page');
+                $('#crudForm').attr('action', '<?= base_url('admin/store') ?>');
+                $('#crudForm')[0].reset();
+                $('#group-kd_teks').show(); // Show ID input
+                
+                // Default values for Page
+                $('#status').val('6');
+                $('#group_data').val('1');
+                
+                // Hide Status/Group fields for Simplicity or Show? 
+                // Pages usually don't need group_data, but status is fixed to 6.
+                // We'll hide them to keep it clean, as user is in "Pages" tab.
+                $('#row-status-group').hide();
+                
+                // Image reset (Pages might have an image header? Optional)
+                $('#current-img-container').addClass('d-none');
+                $('#old_img').val('');
+                $('.custom-file-label').html('Choose new image... (Optional Header)');
                 
                 // Clear CKEditor 5
                 if (editorInstance) {

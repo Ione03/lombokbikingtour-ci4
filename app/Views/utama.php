@@ -478,7 +478,7 @@
             <!-- Map Row (Moved Here) -->
             <div class="row justify-content-center mb-5">
                 <div class="col-lg-12 text-center">
-                    <h2 class="mt-0">Find Us On Map</h2>
+                    <h2 class="mt-0 text-center">Find Us On Map</h2>
                     <hr class="divider my-3">
                 </div>
                 <div class="col-lg-12">
@@ -491,7 +491,7 @@
 
             <div class="row justify-content-center">
                 <div class="col-lg-8 text-center">
-                    <h2 class="mt-0"><?= $contact_title ?></h2>
+                    <h2 class="mt-0 text-center"><?= $contact_title ?></h2>
                     <hr class="divider my-3">
                     <p class="text-muted mb-5"><?= $contact_desc ?></p>
                 </div>
@@ -583,11 +583,11 @@
     <footer class="bg-light py-5">
         <div class="container">
             <div class="row ">
-                <div class="col-lg-4 mb-4 mb-lg-0">
+                <div class="col-lg-6 mb-4 mb-lg-0">
                     <h4 class="text-uppercase mb-4">Lombok Biking Tour</h4>
                     <p class="text-muted mb-0">Experience the best biking adventures in Lombok with our professional guides and top-quality equipment.</p>                    
                 </div>
-                <div class="col-lg-4 mb-4 mb-lg-0">
+                <div class="col-lg-3 mb-4 mb-lg-0">
                     <h4 class="text-uppercase mb-4">Quick Links</h4>
                     <ul class="list-unstyled">
                         <li><a class="js-scroll-trigger" href="#page-top">Home</a></li>
@@ -596,7 +596,7 @@
                         <li><a class="js-scroll-trigger" href="#contact">Contact</a></li>                        
                     </ul>
                 </div>
-                <div class="col-lg-4 ">
+                <div class="col-lg-3 ">
                     <h4 class="text-uppercase mb-4">Follow Us</h4>
                     <a class="footer-social-link" href="#"><i class="fa fa-facebook"></i></a>
                     <a class="footer-social-link" href="#"><i class="fa fa-instagram"></i></a>
