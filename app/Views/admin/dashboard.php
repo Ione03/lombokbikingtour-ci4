@@ -6,6 +6,12 @@
     <title>Admin Dashboard - Lombok Biking Tour</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        /* Fix for CKEditor in Bootstrap Modal */
+        .modal {
+            overflow-y: auto;
+        }
+    </style>
 </head>
 <body class="bg-light">
     <nav class="navbar navbar-dark bg-dark mb-4">
@@ -29,12 +35,12 @@
                 <h5 class="mb-0"><i class="fas fa-table mr-2"></i>Content Management</h5>
                 <div class="d-flex align-items-center">
                     <div class="btn-group mr-2">
-                        <a href="<?= base_url('admin/status/1') ?>" class="btn btn-sm btn-light <?= $current_status == 1 ? 'active font-weight-bold' : '' ?>">Active (1)</a>
-                        <a href="<?= base_url('admin/status/0') ?>" class="btn btn-sm btn-light <?= $current_status === '0' ? 'active font-weight-bold' : '' ?>">Hidden (0)</a>
-                        <a href="<?= base_url('admin/status/5') ?>" class="btn btn-sm btn-light <?= $current_status == 5 ? 'active font-weight-bold' : '' ?>">Packages (5)</a>
+                        <a href="<?= base_url('admin/status/0') ?>" class="btn btn-sm btn-light <?= $current_status === '0' ? 'active font-weight-bold' : '' ?>">Basic Information</a>
+                        <a href="<?= base_url('admin/status/1') ?>" class="btn btn-sm btn-light <?= $current_status == 1 ? 'active font-weight-bold' : '' ?>">Gallery</a>                        
+                        <a href="<?= base_url('admin/status/5') ?>" class="btn btn-sm btn-light <?= $current_status == 5 ? 'active font-weight-bold' : '' ?>">Packages</a>
                     </div>
                     <?php if ($current_status == 5): ?>
-                        <a href="<?= base_url('admin/create') ?>" class="btn btn-sm btn-success"><i class="fas fa-plus"></i> Add Package</a>
+                        <button type="button" class="btn btn-sm btn-success btn-add-package"><i class="fas fa-plus"></i> Add Package</button>
                     <?php endif; ?>
                 </div>
             </div>
@@ -75,7 +81,7 @@
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <a href="<?= base_url('admin/edit/' . $item['kd_teks']) ?>" class="btn btn-primary btn-sm mb-1"><i class="fas fa-edit"></i></a>
+                                    <button type="button" class="btn btn-primary btn-sm mb-1 btn-edit-package" data-item='<?= htmlspecialchars(json_encode($item), ENT_QUOTES, 'UTF-8') ?>'><i class="fas fa-edit"></i></button>
                                     <?php if ($item['status'] == 5): ?> <!-- Allow delete mostly for packages -->
                                     <a href="<?= base_url('admin/delete/' . $item['kd_teks']) ?>" class="btn btn-danger btn-sm mb-1" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fas fa-trash"></i></a>
                                     <?php endif; ?>
@@ -89,7 +95,154 @@
         </div>
     </div>
 
+    <!-- CRUD Modal -->
+    <div class="modal fade" id="crudModal" tabindex="-1" role="dialog" aria-labelledby="crudModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <form id="crudForm" method="post" enctype="multipart/form-data">
+            <div class="modal-header bg-primary text-white">
+              <h5 class="modal-title" id="crudModalLabel">Manage Package</h5>
+              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <!-- ID Input (Only for Create) -->
+                <div class="form-group" id="group-kd_teks">
+                    <label for="kd_teks">ID (Unique Code)</label>
+                    <input type="text" class="form-control" id="kd_teks" name="kd_teks" placeholder="Auto-generated if empty or enter custom ID (e.g. PKG001)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="teks">Title / Main Text</label>
+                    <input type="text" class="form-control" id="teks" name="teks" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="other_teks">Description / Value / Video URL (Other Teks)</label>
+                    <textarea class="form-control" id="other_teks" name="other_teks" rows="5"></textarea>
+                    <small class="form-text text-muted">Use this for descriptions, secondary text, or extended content.</small>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select class="form-control" id="status" name="status">
+                                <option value="1">1 (Active/Normal)</option>
+                                <option value="0">0 (Hidden)</option>
+                                <option value="5">5 (Package/Featured)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="group_data">Group Data</label>
+                            <input type="number" class="form-control" id="group_data" name="group_data" value="1">
+                            <small class="form-text text-muted">0=All, 1=Adventure, 2=Half Day, etc.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Image</label>
+                    <div id="current-img-container" class="mb-2 d-none">
+                        <img id="current-img" src="" class="img-thumbnail" style="max-height: 150px;">
+                        <input type="hidden" id="old_img" name="old_img">
+                        <br><small class="text-muted">Current image</small>
+                    </div>
+                    
+                    <div class="custom-file mt-2">
+                        <input type="file" class="custom-file-input" id="img" name="img">
+                        <label class="custom-file-label" for="img">Choose new image... (Leave empty to keep current)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.ckeditor.com/4.25.1-lts/standard/ckeditor.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Fix for CKEditor inside Bootstrap Modal behaving weirdly with focus
+            $.fn.modal.Constructor.prototype._enforceFocus = function() {};
+
+            // Initialize CKEditor
+            CKEDITOR.replace('other_teks');
+
+            // File input label change
+            $('body').on('change', '.custom-file-input', function() {
+                var fileName = $(this).val().split('\\').pop();
+                $(this).next('.custom-file-label').addClass("selected").html(fileName);
+            });
+
+            // Add Button
+            $('.btn-add-package').click(function() {
+                $('#crudModalLabel').text('Create New Package');
+                $('#crudForm').attr('action', '<?= base_url('admin/store') ?>');
+                $('#crudForm')[0].reset();
+                $('#group-kd_teks').show(); // Show ID input
+                
+                // Default values
+                $('#status').val('5');
+                $('#group_data').val('1');
+                
+                // Image reset
+                $('#current-img-container').addClass('d-none');
+                $('#old_img').val('');
+                $('.custom-file-label').html('Choose new image...');
+                
+                // Clear CKEditor
+                if (CKEDITOR.instances.other_teks) {
+                    CKEDITOR.instances.other_teks.setData('');
+                }
+
+                $('#crudModal').modal('show');
+            });
+
+            // Edit Button
+            $('.btn-edit-package').click(function() {
+                var item = $(this).data('item');
+                // Ensure newlines work in textareas if JSON encoded differently, but standard val() handles it
+                
+                $('#crudModalLabel').text('Edit Item: ' + item.kd_teks);
+                $('#crudForm').attr('action', '<?= base_url('admin/update/') ?>' + item.kd_teks);
+                
+                // Populate fields
+                $('#kd_teks').val(item.kd_teks); 
+                $('#group-kd_teks').hide(); // Hide ID input
+                $('#teks').val(item.teks);
+                $('#other_teks').val(item.other_teks);
+                $('#status').val(item.status);
+                $('#group_data').val(item.group_data);
+                
+                // Image logic
+                if (item.img && item.img != "") {
+                    $('#current-img').attr('src', '<?= base_url('assets/themes/images/') ?>' + item.img);
+                    $('#old_img').val(item.img);
+                    $('#current-img-container').removeClass('d-none');
+                } else {
+                    $('#current-img-container').addClass('d-none');
+                    $('#old_img').val('');
+                }
+                $('.custom-file-label').html('Choose new image... (Leave empty to keep current)');
+                
+                // Set CKEditor data
+                if (CKEDITOR.instances.other_teks) {
+                    CKEDITOR.instances.other_teks.setData(item.other_teks);
+                }
+
+                $('#crudModal').modal('show');
+            });
+        });
+    </script>
 </body>
 </html>
