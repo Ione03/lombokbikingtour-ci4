@@ -34,16 +34,92 @@ class Admin extends Controller
         return true;
     }
 
-    public function index($status = 1) // Default to Active (1) instead of All
+    public function index($status = 1) 
     {
         if (!$this->checkSession()) {
             return redirect()->to('/admin/login');
         }
         
-        $data['items'] = $this->utamaModel->where('status', $status)->findAll();
+        $sort = $this->request->getGet('sort') ?? 'kd_teks';
+        $order = $this->request->getGet('order') ?? 'asc';
+        
+        // Define allowed sort columns to prevent SQL injection
+        $allowedSorts = ['kd_teks', 'teks', 'other_teks', 'last_update'];
+        if (!in_array($sort, $allowedSorts)) {
+            $sort = 'kd_teks';
+        }
+        
+        // Fetch data with sorting
+        $data['items'] = $this->utamaModel->where('status', $status)
+                                          ->orderBy($sort, $order)
+                                          ->findAll();
+                                          
         $data['current_status'] = $status;
+        $data['sort'] = $sort;
+        $data['order'] = $order;
         
         return view('admin/dashboard', $data);
+    }
+
+    public function create()
+    {
+        if (!$this->checkSession()) {
+            return redirect()->to('/admin/login');
+        }
+
+        // Default empty item for packages
+        $data['item'] = [
+            'kd_teks' => '', // Auto-increment or manual? DB uses string ID usually. Let's assume manual or auto. 
+                             // Looking at DB, it is 'kd_teks'. If it's not auto-inc, user must provide.
+                             // I'll assume I need to generate or let user input. 
+                             // For simplicity given the inputs, I'll let user input or generate uniquely.
+                             // Actually, let's look at edit view. It shows ID in header but not input.
+                             // I will enable ID input for create.
+            'teks' => '',
+            'other_teks' => '',
+            'status' => '5', // Default to package
+            'group_data' => '1',
+            'img' => ''
+        ];
+        $data['is_new'] = true;
+
+        return view('admin/edit', $data);
+    }
+
+    public function store()
+    {
+        if (!$this->checkSession()) {
+            return redirect()->to('/admin/login');
+        }
+
+        $img = $this->request->getFile('img');
+        $imgName = '';
+
+        if ($img && $img->isValid() && !$img->hasMoved()) {
+            $imgName = $img->getRandomName();
+            $img->move(FCPATH . 'assets/themes/images', $imgName);
+        }
+        
+        // Generate a simple ID if not provided? Model says primaryKey = kd_teks.
+        // I'll grab a posted ID or generate one like "PKG" . time()
+        $id = $this->request->getPost('kd_teks');
+        if (!$id) {
+            $id = 'PKG' . date('ymdHis');
+        }
+
+        $data = [
+            'kd_teks' => $id,
+            'teks' => $this->request->getPost('teks'),
+            'other_teks' => $this->request->getPost('other_teks'),
+            'status' => $this->request->getPost('status'),
+            'group_data' => $this->request->getPost('group_data'), 
+            'img' => $imgName,
+            'last_update' => date('Y-m-d H:i:s')
+        ];
+
+        $this->utamaModel->insert($data);
+
+        return redirect()->to('/admin/status/5')->with('success', 'Package created successfully');
     }
 
     public function login()
@@ -99,6 +175,8 @@ class Admin extends Controller
         if (empty($data['item'])) {
             return redirect()->to('/admin')->with('error', 'Item not found');
         }
+        
+        $data['is_new'] = false;
 
         return view('admin/edit', $data);
     }
@@ -137,7 +215,7 @@ class Admin extends Controller
         if (!$this->checkSession()) {
             return redirect()->to('/admin/login');
         }
-        // $this->utamaModel->delete($id); // Uncomment to enable
-        return redirect()->to('/admin')->with('error', 'Delete disabled for safety');
+        $this->utamaModel->delete($id);
+        return redirect()->to('/admin/status/5')->with('success', 'Item deleted successfully');
     }
 }

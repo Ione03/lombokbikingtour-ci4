@@ -16,10 +16,17 @@
     <div class="container">
         <div class="card shadow">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Edit Item: <?= $item['kd_teks'] ?></h5>
+                <h5 class="mb-0"><?= $is_new ? 'Create New Package' : 'Edit Item: ' . $item['kd_teks'] ?></h5>
             </div>
             <div class="card-body">
-                <form action="<?= base_url('admin/update/' . $item['kd_teks']) ?>" method="post" enctype="multipart/form-data">
+                <form action="<?= $is_new ? base_url('admin/store') : base_url('admin/update/' . $item['kd_teks']) ?>" method="post" enctype="multipart/form-data">
+                    
+                    <?php if ($is_new): ?>
+                    <div class="form-group">
+                        <label for="kd_teks">ID (Unique Code)</label>
+                        <input type="text" class="form-control" id="kd_teks" name="kd_teks" placeholder="Auto-generated if empty or enter custom ID (e.g. PKG001)">
+                    </div>
+                    <?php endif; ?>
                     
                     <div class="form-group">
                         <label for="teks">Title / Main Text</label>
