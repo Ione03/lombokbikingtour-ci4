@@ -167,7 +167,7 @@
       </div>
     </div>
 
-    <script src="https://cdn.ckeditor.com/4.25.1-lts/standard/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -175,8 +175,16 @@
             // Fix for CKEditor inside Bootstrap Modal behaving weirdly with focus
             $.fn.modal.Constructor.prototype._enforceFocus = function() {};
 
-            // Initialize CKEditor
-            CKEDITOR.replace('other_teks');
+            // Initialize CKEditor 5
+            let editorInstance;
+            ClassicEditor
+                .create(document.querySelector('#other_teks'))
+                .then(editor => {
+                    editorInstance = editor;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
 
             // File input label change
             $('body').on('change', '.custom-file-input', function() {
@@ -200,9 +208,9 @@
                 $('#old_img').val('');
                 $('.custom-file-label').html('Choose new image...');
                 
-                // Clear CKEditor
-                if (CKEDITOR.instances.other_teks) {
-                    CKEDITOR.instances.other_teks.setData('');
+                // Clear CKEditor 5
+                if (editorInstance) {
+                    editorInstance.setData('');
                 }
 
                 $('#crudModal').modal('show');
@@ -235,9 +243,9 @@
                 }
                 $('.custom-file-label').html('Choose new image... (Leave empty to keep current)');
                 
-                // Set CKEditor data
-                if (CKEDITOR.instances.other_teks) {
-                    CKEDITOR.instances.other_teks.setData(item.other_teks);
+                // Set CKEditor 5 data
+                if (editorInstance) {
+                    editorInstance.setData(item.other_teks);
                 }
 
                 $('#crudModal').modal('show');
