@@ -389,3 +389,86 @@ input[type=number]::-webkit-outer-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+/* CKEditor Content Styling */
+.ck-content {
+    color: #333;
+    line-height: 1.6;
+}
+
+.ck-content h1, 
+.ck-content h2, 
+.ck-content h3, 
+.ck-content h4, 
+.ck-content h5, 
+.ck-content h6 {
+    color: #2c3e50;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.ck-content p {
+    margin-bottom: 1rem;
+}
+
+.ck-content ul, 
+.ck-content ol {
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+}
+
+.ck-content ul {
+    list-style-type: disc;
+}
+
+.ck-content ol {
+    list-style-type: decimal;
+}
+
+.ck-content li {
+    margin-bottom: 0.5rem;
+}
+
+.ck-content a {
+    color: #f4623a;
+    text-decoration: underline;
+}
+
+.ck-content a:hover {
+    color: #d94c25;
+}
+
+.ck-content blockquote {
+    border-left: 5px solid #f4623a;
+    padding-left: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    font-style: italic;
+    color: #555;
+    background: #f9f9f9;
+    padding: 1rem;
+}
+
+.ck-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin: 1rem 0;
+}
+
+.ck-content table {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+}
+
+.ck-content table td, 
+.ck-content table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.ck-content table th {
+    background-color: #f4623a;
+    color: white;
+}

@@ -21,10 +21,8 @@ class Page extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        // Pass generic data if needed (e.g. for header/footer common vars if they exist)
-        // Utama controller passes $value for everything. 
-        // We might need to copy some header/footer logic or just duplicate the layout.
-        // For now, let's assume valid pages.
+        // Fetch all data for footer/navigation
+        $data['value'] = $this->utamaModel->getData();
         
         return view('page', $data);
     }
