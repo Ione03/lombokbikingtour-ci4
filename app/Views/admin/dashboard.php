@@ -41,6 +41,8 @@
                     </div>
                     <?php if ($current_status == 5): ?>
                         <button type="button" class="btn btn-sm btn-success btn-add-package"><i class="fas fa-plus"></i> Add Package</button>
+                    <?php elseif ($current_status == 1): ?>
+                        <button type="button" class="btn btn-sm btn-success btn-add-gallery"><i class="fas fa-plus"></i> Add Create New Gallery</button>
                     <?php endif; ?>
                 </div>
             </div>
@@ -61,8 +63,10 @@
                                 <th><a href="?sort=kd_teks&order=<?= $newOrder ?>" class="text-dark d-block">ID <?= $icon('kd_teks') ?></a></th>
                                 <th><a href="?sort=teks&order=<?= $newOrder ?>" class="text-dark d-block">Title (Teks) <?= $icon('teks') ?></a></th>
                                 <th><a href="?sort=other_teks&order=<?= $newOrder ?>" class="text-dark d-block">Description (Other) <?= $icon('other_teks') ?></a></th>
+                                <?php if ($current_status != 1): ?>
                                 <th>Status</th>
                                 <th>Group</th>
+                                <?php endif; ?>
                                 <th>Image</th>
                                 <th>Actions</th>
                             </tr>
@@ -73,8 +77,10 @@
                                 <td><?= $item['kd_teks'] ?></td>
                                 <td><?= strip_tags($item['teks']) ?></td>
                                 <td><?= strip_tags(substr($item['other_teks'], 0, 50)) ?>...</td>
+                                <?php if ($current_status != 1): ?>
                                 <td><span class="badge badge-<?= $item['status'] == 5 ? 'success' : 'secondary' ?>"><?= $item['status'] ?></span></td>
                                 <td><?= $item['group_data'] ?></td>
+                                <?php endif; ?>
                                 <td>
                                     <?php if ($item['img']): ?>
                                         <img src="<?= base_url('assets/themes/images/' . $item['img']) ?>" height="40">
@@ -82,7 +88,7 @@
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm mb-1 btn-edit-package" data-item='<?= htmlspecialchars(json_encode($item), ENT_QUOTES, 'UTF-8') ?>'><i class="fas fa-edit"></i></button>
-                                    <?php if ($item['status'] == 5): ?> <!-- Allow delete mostly for packages -->
+                                    <?php if ($item['status'] == 5 || $item['status'] == 1): ?> <!-- Allow delete for packages and gallery -->
                                     <a href="<?= base_url('admin/delete/' . $item['kd_teks']) ?>" class="btn btn-danger btn-sm mb-1" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fas fa-trash"></i></a>
                                     <?php endif; ?>
                                 </td>
@@ -124,7 +130,7 @@
                     <small class="form-text text-muted">Use this for descriptions, secondary text, or extended content.</small>
                 </div>
 
-                <div class="row">
+                <div class="row" id="row-status-group">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="status">Status</label>
@@ -192,16 +198,46 @@
                 $(this).next('.custom-file-label').addClass("selected").html(fileName);
             });
 
-            // Add Button
+            // Add Gallery Button
+            $('.btn-add-gallery').click(function() {
+                $('#crudModalLabel').text('Create New Gallery');
+                $('#crudForm').attr('action', '<?= base_url('admin/store') ?>');
+                $('#crudForm')[0].reset();
+                $('#group-kd_teks').show(); // Show ID input
+                
+                // Default values for Gallery
+                $('#status').val('1');
+                $('#group_data').val('1');
+                
+                // Hide Status/Group fields
+                $('#row-status-group').hide();
+                
+                // Image reset
+                $('#current-img-container').addClass('d-none');
+                $('#old_img').val('');
+                $('.custom-file-label').html('Choose new image...');
+                
+                // Clear CKEditor 5
+                if (editorInstance) {
+                    editorInstance.setData('');
+                }
+
+                $('#crudModal').modal('show');
+            });
+
+            // Add Package Button
             $('.btn-add-package').click(function() {
                 $('#crudModalLabel').text('Create New Package');
                 $('#crudForm').attr('action', '<?= base_url('admin/store') ?>');
                 $('#crudForm')[0].reset();
                 $('#group-kd_teks').show(); // Show ID input
                 
-                // Default values
+                // Default values for Package
                 $('#status').val('5');
                 $('#group_data').val('1');
+                
+                // Show Status/Group fields
+                $('#row-status-group').show();
                 
                 // Image reset
                 $('#current-img-container').addClass('d-none');
@@ -231,6 +267,13 @@
                 $('#other_teks').val(item.other_teks);
                 $('#status').val(item.status);
                 $('#group_data').val(item.group_data);
+                
+                // Show/Hide Status/Group based on item status
+                if (item.status == 1) {
+                    $('#row-status-group').hide();
+                } else {
+                    $('#row-status-group').show();
+                }
                 
                 // Image logic
                 if (item.img && item.img != "") {
