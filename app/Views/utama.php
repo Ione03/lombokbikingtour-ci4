@@ -582,10 +582,10 @@
     <!-- Footer -->
     <footer class="bg-light py-5">
         <div class="container">
-            <div class="row">
+            <div class="row ">
                 <div class="col-lg-4 mb-4 mb-lg-0">
                     <h4 class="text-uppercase mb-4">Lombok Biking Tour</h4>
-                    <p class="text-muted mb-0">Experience the best biking adventures in Lombok with our professional guides and top-quality equipment.</p>
+                    <p class="text-muted mb-0">Experience the best biking adventures in Lombok with our professional guides and top-quality equipment.</p>                    
                 </div>
                 <div class="col-lg-4 mb-4 mb-lg-0">
                     <h4 class="text-uppercase mb-4">Quick Links</h4>
@@ -593,17 +593,21 @@
                         <li><a class="js-scroll-trigger" href="#page-top">Home</a></li>
                         <li><a class="js-scroll-trigger" href="#package">Packages</a></li>
                         <li><a class="js-scroll-trigger" href="#galery">Gallery</a></li>
-                        <li><a class="js-scroll-trigger" href="#contact">Contact</a></li>
+                        <li><a class="js-scroll-trigger" href="#contact">Contact</a></li>                        
                     </ul>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4 ">
                     <h4 class="text-uppercase mb-4">Follow Us</h4>
                     <a class="footer-social-link" href="#"><i class="fa fa-facebook"></i></a>
                     <a class="footer-social-link" href="#"><i class="fa fa-instagram"></i></a>
-                    <a class="footer-social-link" href="#"><i class="fa fa-twitter"></i></a>
-                </div>
+                    <a class="footer-social-link" href="#"><i class="fa fa-twitter"></i></a>                    
+
+                    <!-- Histats.com  (div with counter) -->
+                     
+                </div>                
             </div>
-            <div class="small text-center text-muted mt-5">
+            <!-- <div id="histats_counter" class="mt-5 md:text-center text-right" ></div> -->
+            <div class="small text-center text-muted mt-5 ">
                 Copyright &copy; 2026 - LombokBikingTour.com<br>
                 <span class="d-block mt-2">
                     <?php if ($addr_telp): ?>Phone: <?= $addr_telp ?> | <?php endif; ?>
@@ -905,6 +909,7 @@
         function filterPackage(pIdx) {
             var url1 = "<?= base_url('package-filter/') ?>" + pIdx;
             // Add loading state
+            console.log('url1', url1);
             $(".package-items").addClass('loading');
             $.ajax({
                 url: url1,
@@ -954,5 +959,18 @@
             });
         }
     </script>
+          
+    <!-- Histats.com  START  (aync)-->
+    <script type="text/javascript">var _Hasync= _Hasync|| [];
+    _Hasync.push(['Histats.start', '1,5005008,4,239,241,20,00010000']);
+    _Hasync.push(['Histats.fasi', '1']);
+    _Hasync.push(['Histats.track_hits', '']);
+    (function() {
+    var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+    hs.src = ('//s10.histats.com/js15_as.js');
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+    })();</script>
+    <noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?5005008&101" alt="" border="0"></a></noscript>
+    <!-- Histats.com  END  -->
 </body>
 </html>

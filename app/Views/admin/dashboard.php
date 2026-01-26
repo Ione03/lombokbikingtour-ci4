@@ -59,12 +59,24 @@
                                         }
                                         return '<i class="fas fa-sort text-muted"></i>';
                                     };
+                                    
+                                    $groupMap = [
+                                        1 => 'Adventure Tour',
+                                        2 => 'Half Day Biking Tour',
+                                        3 => 'Full Day Biking Tour',
+                                        4 => 'Long Route Bike',
+                                        5 => 'Mountain Biking Tour',
+                                        6 => 'Slope Rinjani Biking',
+                                        7 => 'Combining Tour'
+                                    ];
                                 ?>
                                 <th><a href="?sort=kd_teks&order=<?= $newOrder ?>" class="text-dark d-block">ID <?= $icon('kd_teks') ?></a></th>
                                 <th><a href="?sort=teks&order=<?= $newOrder ?>" class="text-dark d-block">Title (Teks) <?= $icon('teks') ?></a></th>
                                 <th><a href="?sort=other_teks&order=<?= $newOrder ?>" class="text-dark d-block">Description (Other) <?= $icon('other_teks') ?></a></th>
-                                <?php if ($current_status != 1): ?>
+                                <?php if ($current_status != 1 && $current_status != 5): ?>
                                 <th>Status</th>
+                                <?php endif; ?>
+                                <?php if ($current_status != 1): ?>
                                 <th>Group</th>
                                 <?php endif; ?>
                                 <th>Image</th>
@@ -77,9 +89,11 @@
                                 <td><?= $item['kd_teks'] ?></td>
                                 <td><?= strip_tags($item['teks']) ?></td>
                                 <td><?= strip_tags(substr($item['other_teks'], 0, 50)) ?>...</td>
-                                <?php if ($current_status != 1): ?>
+                                <?php if ($current_status != 1 && $current_status != 5): ?>
                                 <td><span class="badge badge-<?= $item['status'] == 5 ? 'success' : 'secondary' ?>"><?= $item['status'] ?></span></td>
-                                <td><?= $item['group_data'] ?></td>
+                                <?php endif; ?>
+                                <?php if ($current_status != 1): ?>
+                                <td><?= $groupMap[$item['group_data']] ?? $item['group_data'] ?></td>
                                 <?php endif; ?>
                                 <td>
                                     <?php if ($item['img']): ?>
@@ -144,8 +158,12 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="group_data">Group Data</label>
-                            <input type="number" class="form-control" id="group_data" name="group_data" value="1">
-                            <small class="form-text text-muted">0=All, 1=Adventure, 2=Half Day, etc.</small>
+                            <select class="form-control" id="group_data" name="group_data">
+                                <?php foreach ($groupMap as $key => $value): ?>
+                                    <option value="<?= $key ?>"><?= $value ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <small class="form-text text-muted">Select the tour category.</small>
                         </div>
                     </div>
                 </div>

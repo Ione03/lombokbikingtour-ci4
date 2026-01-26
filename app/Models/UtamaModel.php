@@ -39,7 +39,7 @@ class UtamaModel extends Model
         $builder = $this->where('status', '5');
         
         if ($pIdx != '0') {
-            $builder->where('group_data', (intval($pIdx) - 1));
+            $builder->where('group_data', $pIdx);
         }
         
         return $builder->orderBy('RAND()')
