@@ -89,25 +89,10 @@
 
 <body id="page-top">
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
-        <div class="container">
-            <a class="navbar-brand js-scroll-trigger" href="/">
-                <img height="40" src="<?= base_url('assets/themes/img/Logo.png') ?>"><span class="align-bottom">&nbsp; Lombok Biking Tour</span></a>
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto my-2 my-lg-0">
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#package">Package</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#galery">Gallery</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?= view('layout/navbar') ?>
 
     <!-- Masthead Slideshow -->
+    <?php // ... (keep masthead logic) ?>
     <?php
         $teks_01 = '';
         $teks_other_01 = '';
@@ -580,48 +565,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-light py-5">
-        <div class="container">
-            <div class="row ">
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <h4 class="text-uppercase mb-4">Lombok Biking Tour</h4>
-                    <p class="text-muted mb-0">Experience the best biking adventures in Lombok with our professional guides and top-quality equipment.</p>                    
-                </div>
-                <div class="col-lg-3 mb-4 mb-lg-0">
-                    <h4 class="text-uppercase mb-4">Quick Links</h4>
-                    <ul class="list-unstyled">
-                        <li><a class="js-scroll-trigger" href="#page-top">Home</a></li>
-                        <li><a class="js-scroll-trigger" href="#package">Packages</a></li>
-                        <li><a class="js-scroll-trigger" href="#galery">Gallery</a></li>
-                        <li><a class="js-scroll-trigger" href="#contact">Contact</a></li>
-                        <li><a href="<?= base_url('page/payment') ?>">Payment</a></li>
-                        <li><a href="<?= base_url('page/privacy-policy') ?>">Privacy Policy</a></li>
-                        <li><a href="<?= base_url('page/term-of-use') ?>">Term of Use</a></li>
-                        <li><a href="<?= base_url('page/faq') ?>">FAQ</a></li>                        
-                    </ul>
-                </div>
-                <div class="col-lg-3 ">
-                    <h4 class="text-uppercase mb-4">Follow Us</h4>
-                    <a class="footer-social-link" href="#"><i class="fa fa-facebook"></i></a>
-                    <a class="footer-social-link" href="#"><i class="fa fa-instagram"></i></a>
-                    <a class="footer-social-link" href="#"><i class="fa fa-twitter"></i></a>                    
-
-                    <!-- Histats.com  (div with counter) -->
-                     
-                </div>                
-            </div>
-            <!-- <div id="histats_counter" class="mt-5 md:text-center text-right" ></div> -->
-            <div class="small text-center text-muted mt-5 ">
-                Copyright &copy; 2026 - LombokBikingTour.com<br>
-                <span class="d-block mt-2">
-                    <?php if ($addr_telp): ?>Phone: <?= $addr_telp ?> | <?php endif; ?>
-                    <?php if ($addr_wa): ?>WhatsApp: <?= $addr_wa ?> | <?php endif; ?>
-                    <?php if ($addr_email): ?>Email: <?= $addr_email ?> | <?php endif; ?>
-                    <?php if ($addr_location): ?>Address: <?= $addr_location ?><?php endif; ?>
-                </span>
-            </div>
-        </div>
-    </footer>
+    <?= view('layout/footer', ['value' => $value]) ?>
 
     <!-- Scripts -->
     <script src="<?= base_url('assets/themes/vendor/jquery/jquery.min.js') ?>"></script>
