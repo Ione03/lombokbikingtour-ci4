@@ -34,10 +34,23 @@ class Admin extends Controller
         return true;
     }
 
-    public function index($status = 1) 
+    public function index($status = null) 
     {
         if (!$this->checkSession()) {
             return redirect()->to('/admin/login');
+        }
+        
+        $session = session();
+        
+        // Sticky Tab Logic
+        if ($status !== null) {
+            $session->set('last_admin_status', $status);
+        } else {
+            if ($session->has('last_admin_status')) {
+                return redirect()->to('/admin/status/' . $session->get('last_admin_status'));
+            }
+            $status = 1;
+            $session->set('last_admin_status', $status);
         }
         
         $sort = $this->request->getGet('sort') ?? 'kd_teks';
@@ -101,7 +114,7 @@ class Admin extends Controller
             
             // Smart Crop Logic
             $db = \Config\Database::connect();
-            $query = $db->query("SELECT img_width, img_height FROM g_settings WHERE kd_teks = 'S04' LIMIT 1");
+            $query = $db->query("SELECT img_width, img_height FROM g_settings WHERE kd_setting = 'S04' LIMIT 1");
             $settings = $query->getRow();
             
             if ($settings && !empty($settings->img_width) && !empty($settings->img_height)) {
@@ -210,12 +223,18 @@ class Admin extends Controller
         // Handle Image Upload
         // Handle Image Upload
         if ($img && $img->isValid() && !$img->hasMoved()) {
+            // Delete old image if exists
+            $oldImg = $this->request->getPost('old_img');
+            if ($oldImg && file_exists(FCPATH . 'assets/themes/images/' . $oldImg)) {
+                unlink(FCPATH . 'assets/themes/images/' . $oldImg);
+            }
+
             $imgName = $img->getRandomName();
             $img->move(FCPATH . 'assets/themes/images', $imgName);
             
             // Smart Crop Logic
             $db = \Config\Database::connect();
-            $query = $db->query("SELECT img_width, img_height FROM g_settings LIMIT 1");
+            $query = $db->query("SELECT img_width, img_height FROM g_settings WHERE kd_setting = 'S04' LIMIT 1");
             $settings = $query->getRow();
             
             if ($settings && !empty($settings->img_width) && !empty($settings->img_height)) {
@@ -250,6 +269,15 @@ class Admin extends Controller
         if (!$this->checkSession()) {
             return redirect()->to('/admin/login');
         }
+        
+        // Delete image file if exists
+        $item = $this->utamaModel->find($id);
+        if ($item && !empty($item['img'])) {
+            if (file_exists(FCPATH . 'assets/themes/images/' . $item['img'])) {
+                unlink(FCPATH . 'assets/themes/images/' . $item['img']);
+            }
+        }
+
         $this->utamaModel->delete($id);
         return redirect()->to('/admin/status/5')->with('success', 'Item deleted successfully');
     }
