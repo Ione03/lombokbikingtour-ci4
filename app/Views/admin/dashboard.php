@@ -148,19 +148,11 @@
                     <small class="form-text text-muted">Use this for descriptions, secondary text, or extended content.</small>
                 </div>
 
-                <div class="row" id="row-status-group">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="status">Status</label>
-                            <select class="form-control" id="status" name="status">
-                                <option value="1">1 (Active/Normal)</option>
-                                <option value="0">0 (Hidden)</option>
-                                <option value="5">5 (Package/Featured)</option>
-                                <option value="6">6 (Page/Information)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
+                <!-- Status is now hidden and handled by JS -->
+                <input type="hidden" id="status" name="status">
+
+                <div class="row">
+                    <div class="col-md-12" id="group-data-container">
                         <div class="form-group">
                             <label for="group_data">Group Data</label>
                             <select class="form-control" id="group_data" name="group_data">
@@ -232,8 +224,8 @@
                 $('#status').val('1');
                 $('#group_data').val('1');
                 
-                // Hide Status/Group fields
-                $('#row-status-group').hide();
+                // Hide Group fields
+                $('#group-data-container').hide();
                 
                 // Image reset
                 $('#current-img-container').addClass('d-none');
@@ -259,8 +251,8 @@
                 $('#status').val('5');
                 $('#group_data').val('1');
                 
-                // Show Status/Group fields
-                $('#row-status-group').show();
+                // Show Group fields
+                $('#group-data-container').show();
                 
                 // Image reset
                 $('#current-img-container').addClass('d-none');
@@ -286,10 +278,8 @@
                 $('#status').val('6');
                 $('#group_data').val('1');
                 
-                // Hide Status/Group fields for Simplicity or Show? 
-                // Pages usually don't need group_data, but status is fixed to 6.
-                // We'll hide them to keep it clean, as user is in "Pages" tab.
-                $('#row-status-group').hide();
+                // Hide Group fields (Only for Packages)
+                $('#group-data-container').hide();
                 
                 // Image reset (Pages might have an image header? Optional)
                 $('#current-img-container').addClass('d-none');
@@ -320,11 +310,12 @@
                 $('#status').val(item.status);
                 $('#group_data').val(item.group_data);
                 
-                // Show/Hide Status/Group based on item status
-                if (item.status == 1) {
-                    $('#row-status-group').hide();
+                // Show/Hide Group based on item status
+                // Status 5 is Package -> Show Group
+                if (item.status == 5) {
+                    $('#group-data-container').show();
                 } else {
-                    $('#row-status-group').show();
+                    $('#group-data-container').hide();
                 }
                 
                 // Image logic

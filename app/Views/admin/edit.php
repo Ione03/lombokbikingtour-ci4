@@ -39,19 +39,10 @@
                         <small class="form-text text-muted">Use this for descriptions, secondary text, or extended content.</small>
                     </div>
 
+                    <input type="hidden" id="status" name="status" value="<?= $item['status'] ?>">
+
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="status">Status</label>
-                                <select class="form-control" id="status" name="status">
-                                    <option value="1" <?= $item['status'] == 1 ? 'selected' : '' ?>>1 (Active/Normal)</option>
-                                    <option value="0" <?= $item['status'] == 0 ? 'selected' : '' ?>>0 (Hidden)</option>
-                                    <option value="5" <?= $item['status'] == 5 ? 'selected' : '' ?>>5 (Package/Featured)</option>
-                                    <option value="6" <?= $item['status'] == 6 ? 'selected' : '' ?>>6 (Page/Information)</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12" id="group-data-container">
                             <div class="form-group">
                                 <label for="group_data">Group Data</label>
                                 <input type="number" class="form-control" id="group_data" name="group_data" value="<?= $item['group_data'] ?>">
@@ -90,6 +81,15 @@
         $('.custom-file-input').on('change', function() {
             var fileName = $(this).val().split('\\').pop();
             $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        });
+
+        $(document).ready(function() {
+            var status = $('#status').val();
+            if (status == 5) {
+                $('#group-data-container').show();
+            } else {
+                $('#group-data-container').hide();
+            }
         });
     </script>
 </body>
