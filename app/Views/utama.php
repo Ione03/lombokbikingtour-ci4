@@ -109,53 +109,87 @@
     ?>
     
     <header class="masthead-slideshow">
-        <!-- Slide 1 -->
-        <div class="masthead-slide active" style="background-image: linear-gradient(to bottom, rgba(92,245,255,0.2) 0%, rgba(92, 77, 66, 0.5) 100%), url('<?= base_url('assets/themes/images/slider-image1.jpg') ?>');">
-            <div class="container h-100">
-                <div class="row h-100 align-items-center justify-content-center text-center">
-                    <div class="col-lg-10 align-self-end">
-                        <h1 class="text-white font-weight-bold"><?= $teks_01 ?></h1>
-                        <hr class="divider my-4">
-                    </div>
-                    <div class="col-lg-8 align-self-baseline">
-                        <p class="text-white-75 font-weight-light mb-5"><?= $teks_other_01 ?></p>
-                        <a class="btn btn-primary btn-xl js-scroll-trigger" href="#package">Find Out More</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <?php
+        $slides = [];
+        if (isset($value) && is_array($value)) {
+            foreach ($value as $item) {
+                if (isset($item['status']) && $item['status'] == "7") {
+                    $slides[] = $item;
+                }
+            }
+        }
         
-        <!-- Slide 2 -->
-        <div class="masthead-slide" style="background-image: linear-gradient(to bottom, rgba(92,245,255,0.2) 0%, rgba(92, 77, 66, 0.5) 100%), url('<?= base_url('assets/themes/images/slider-image2.jpg') ?>');">
-            <div class="container h-100">
-                <div class="row h-100 align-items-center justify-content-center text-center">
-                    <div class="col-lg-10 align-self-end">
-                        <h1 class="text-white font-weight-bold">Explore Lombok's Beauty</h1>
-                        <hr class="divider my-4">
-                    </div>
-                    <div class="col-lg-8 align-self-baseline">
-                        <p class="text-white-75 font-weight-light mb-5">Experience the amazing landscapes and culture of Lombok on two wheels</p>
-                        <a class="btn btn-primary btn-xl js-scroll-trigger" href="#package">View Packages</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Slide 3 -->
-        <div class="masthead-slide" style="background-image: linear-gradient(to bottom, rgba(92,245,255,0.2) 0%, rgba(92, 77, 66, 0.5) 100%), url('<?= base_url('assets/themes/images/slider-image3.jpg') ?>');">
-            <div class="container h-100">
-                <div class="row h-100 align-items-center justify-content-center text-center">
-                    <div class="col-lg-10 align-self-end">
-                        <h1 class="text-white font-weight-bold">Adventure Awaits</h1>
-                        <hr class="divider my-4">
-                    </div>
-                    <div class="col-lg-8 align-self-baseline">
-                        <p class="text-white-75 font-weight-light mb-5">Join us for an unforgettable biking adventure through Lombok's scenic routes</p>
-                        <a class="btn btn-primary btn-xl js-scroll-trigger" href="#package">Book Now</a>
+        // If no dynamic slides, use default hardcoded ones
+        $use_default = empty($slides);
+    ?>
+
+    <header class="masthead-slideshow">
+        <?php if ($use_default): ?>
+            <!-- Default Slide 1 -->
+            <div class="masthead-slide active" style="background-image: linear-gradient(to bottom, rgba(92,245,255,0.2) 0%, rgba(92, 77, 66, 0.5) 100%), url('<?= base_url('assets/themes/images/slider-image1.jpg') ?>');">
+                <div class="container h-100">
+                    <div class="row h-100 align-items-center justify-content-center text-center">
+                        <div class="col-lg-10 align-self-end">
+                            <h1 class="text-white font-weight-bold"><?= $teks_01 ?: 'Lombok Biking Tour' ?></h1>
+                            <hr class="divider my-4">
+                        </div>
+                        <div class="col-lg-8 align-self-baseline">
+                            <p class="text-white-75 font-weight-light mb-5"><?= $teks_other_01 ?: 'Experience the beauty of Lombok on two wheels' ?></p>
+                            <a class="btn btn-primary btn-xl js-scroll-trigger" href="#package">Find Out More</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            
+            <!-- Default Slide 2 -->
+            <div class="masthead-slide" style="background-image: linear-gradient(to bottom, rgba(92,245,255,0.2) 0%, rgba(92, 77, 66, 0.5) 100%), url('<?= base_url('assets/themes/images/slider-image2.jpg') ?>');">
+                <div class="container h-100">
+                    <div class="row h-100 align-items-center justify-content-center text-center">
+                        <div class="col-lg-10 align-self-end">
+                            <h1 class="text-white font-weight-bold">Explore Lombok's Beauty</h1>
+                            <hr class="divider my-4">
+                        </div>
+                        <div class="col-lg-8 align-self-baseline">
+                            <p class="text-white-75 font-weight-light mb-5">Experience the amazing landscapes and culture of Lombok on two wheels</p>
+                            <a class="btn btn-primary btn-xl js-scroll-trigger" href="#package">View Packages</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Default Slide 3 -->
+            <div class="masthead-slide" style="background-image: linear-gradient(to bottom, rgba(92,245,255,0.2) 0%, rgba(92, 77, 66, 0.5) 100%), url('<?= base_url('assets/themes/images/slider-image3.jpg') ?>');">
+                <div class="container h-100">
+                    <div class="row h-100 align-items-center justify-content-center text-center">
+                        <div class="col-lg-10 align-self-end">
+                            <h1 class="text-white font-weight-bold">Adventure Awaits</h1>
+                            <hr class="divider my-4">
+                        </div>
+                        <div class="col-lg-8 align-self-baseline">
+                            <p class="text-white-75 font-weight-light mb-5">Join us for an unforgettable biking adventure through Lombok's scenic routes</p>
+                            <a class="btn btn-primary btn-xl js-scroll-trigger" href="#package">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php else: ?>
+            <?php foreach ($slides as $index => $slide): ?>
+                <div class="masthead-slide <?= $index === 0 ? 'active' : '' ?>" style="background-image: linear-gradient(to bottom, rgba(92,245,255,0.2) 0%, rgba(92, 77, 66, 0.5) 100%), url('<?= base_url('assets/themes/images/' . $slide['img']) ?>');">
+                    <div class="container h-100">
+                        <div class="row h-100 align-items-center justify-content-center text-center">
+                            <div class="col-lg-10 align-self-end">
+                                <h1 class="text-white font-weight-bold"><?= $slide['teks'] ?></h1>
+                                <hr class="divider my-4">
+                            </div>
+                            <div class="col-lg-8 align-self-baseline">
+                                <p class="text-white-75 font-weight-light mb-5"><?= $slide['other_teks'] ?></p>
+                                <a class="btn btn-primary btn-xl js-scroll-trigger" href="#package">Find Out More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
         
         <!-- Navigation Controls -->
         <button class="slideshow-control prev" onclick="changeSlide(-1)">
@@ -167,9 +201,15 @@
         
         <!-- Slide Indicators -->
         <div class="slide-indicators">
-            <span class="indicator active" onclick="goToSlide(0)"></span>
-            <span class="indicator" onclick="goToSlide(1)"></span>
-            <span class="indicator" onclick="goToSlide(2)"></span>
+            <?php if ($use_default): ?>
+                <span class="indicator active" onclick="goToSlide(0)"></span>
+                <span class="indicator" onclick="goToSlide(1)"></span>
+                <span class="indicator" onclick="goToSlide(2)"></span>
+            <?php else: ?>
+                <?php foreach ($slides as $index => $slide): ?>
+                    <span class="indicator <?= $index === 0 ? 'active' : '' ?>" onclick="goToSlide(<?= $index ?>)"></span>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </header>
 
