@@ -15,30 +15,11 @@ class Admin extends Controller
         helper(['form', 'url']);
     }
 
-    private function checkSession()
-    {
-        $session = session();
-        if (!$session->get('is_admin')) {
-            return false;
-        }
 
-        // Check 5 minutes idle time (300 seconds)
-        $lastActivity = $session->get('last_activity');
-        if ($lastActivity && (time() - $lastActivity > 300)) {
-            $session->destroy();
-            return false;
-        }
-
-        // Update activity timestamp
-        $session->set('last_activity', time());
-        return true;
-    }
 
     public function index($status = null) 
     {
-        if (!$this->checkSession()) {
-            return redirect()->to('/admin/login');
-        }
+
         
         $session = session();
         
@@ -76,9 +57,7 @@ class Admin extends Controller
 
     public function create()
     {
-        if (!$this->checkSession()) {
-            return redirect()->to('/admin/login');
-        }
+
 
         // Default empty item for packages
         $data['item'] = [
@@ -101,9 +80,7 @@ class Admin extends Controller
 
     public function store()
     {
-        if (!$this->checkSession()) {
-            return redirect()->to('/admin/login');
-        }
+
 
         $img = $this->request->getFile('img');
         $imgName = '';
@@ -196,9 +173,7 @@ class Admin extends Controller
 
     public function edit($id)
     {
-        if (!$this->checkSession()) {
-            return redirect()->to('/admin/login');
-        }
+
 
         $data['item'] = $this->utamaModel->find($id);
         
@@ -213,9 +188,7 @@ class Admin extends Controller
 
     public function update($id)
     {
-        if (!$this->checkSession()) {
-            return redirect()->to('/admin/login');
-        }
+
 
         $img = $this->request->getFile('img');
         $imgName = $this->request->getPost('old_img');
@@ -266,9 +239,7 @@ class Admin extends Controller
 
     public function delete($id)
     {
-        if (!$this->checkSession()) {
-            return redirect()->to('/admin/login');
-        }
+
         
         // Delete image file if exists
         $item = $this->utamaModel->find($id);
