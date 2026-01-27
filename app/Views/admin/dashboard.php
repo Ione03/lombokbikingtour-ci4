@@ -174,7 +174,9 @@
                     <div id="current-img-container" class="mb-2 d-none">
                         <img id="current-img" src="" class="img-thumbnail" style="max-height: 150px;">
                         <input type="hidden" id="old_img" name="old_img">
-                        <br><small class="text-muted">Current image</small>
+                        <input type="hidden" id="delete_img" name="delete_img" value="0">
+                        <br>
+                        <button type="button" class="btn btn-danger btn-sm mt-2" id="btn-delete-img"><i class="fas fa-trash"></i> Remove Image</button>
                     </div>
                     
                     <div class="custom-file mt-2">
@@ -236,6 +238,7 @@
                 // Image reset
                 $('#current-img-container').addClass('d-none');
                 $('#old_img').val('');
+                $('#delete_img').val('0');
                 $('.custom-file-label').html('Choose new image...');
                 
                 // Clear CKEditor 5
@@ -265,6 +268,7 @@
                 // Image reset
                 $('#current-img-container').addClass('d-none');
                 $('#old_img').val('');
+                $('#delete_img').val('0');
                 $('.custom-file-label').html('Choose new image...');
                 
                 // Clear CKEditor 5
@@ -294,6 +298,7 @@
                 // Image reset (Pages might have an image header? Optional)
                 $('#current-img-container').addClass('d-none');
                 $('#old_img').val('');
+                $('#delete_img').val('0');
                 $('.custom-file-label').html('Choose new image... (Optional Header)');
                 
                 // Clear CKEditor 5
@@ -336,6 +341,7 @@
                 }
                 
                 // Image logic
+                $('#delete_img').val('0'); // Reset delete flag
                 if (item.img && item.img != "") {
                     $('#current-img').attr('src', '<?= base_url('assets/themes/images/') ?>' + item.img);
                     $('#old_img').val(item.img);
@@ -352,6 +358,14 @@
                 }
 
                 $('#crudModal').modal('show');
+            });
+
+            // Delete Image Button Logic
+            $('#btn-delete-img').click(function() {
+                $('#delete_img').val('1');
+                $('#current-img-container').addClass('d-none');
+                // We don't clear old_img here so we can potentially undo (if we built that), 
+                // but for now visual hiding is enough. Backend reads delete_img.
             });
         });
     </script>

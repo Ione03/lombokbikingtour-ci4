@@ -221,6 +221,13 @@ class Admin extends Controller
                     log_message('error', 'Image processing failed: ' . $e->getMessage());
                 }
             }
+        } elseif ($this->request->getPost('delete_img') == '1') {
+            // Remove Image Requested
+            $oldImg = $this->request->getPost('old_img');
+            if ($oldImg && file_exists(FCPATH . 'assets/themes/images/' . $oldImg)) {
+                unlink(FCPATH . 'assets/themes/images/' . $oldImg);
+            }
+            $imgName = '';
         }
 
         $data = [
