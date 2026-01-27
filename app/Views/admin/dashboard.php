@@ -77,13 +77,15 @@
                                 <th><a href="?sort=kd_teks&order=<?= $newOrder ?>" class="text-dark d-block">ID <?= $icon('kd_teks') ?></a></th>
                                 <th><a href="?sort=teks&order=<?= $newOrder ?>" class="text-dark d-block">Title (Teks) <?= $icon('teks') ?></a></th>
                                 <th><a href="?sort=other_teks&order=<?= $newOrder ?>" class="text-dark d-block">Description (Other) <?= $icon('other_teks') ?></a></th>
-                                <?php if ($current_status != 1 && $current_status != 5): ?>
+                                <?php if ($current_status != 1 && $current_status != 5 && $current_status != 0 && $current_status != 6 ): ?>
                                 <th>Status</th>
                                 <?php endif; ?>
-                                <?php if ($current_status != 1): ?>
+                                <?php if ($current_status != 1 && $current_status != 0 && $current_status != 6): ?>
                                 <th>Group</th>
                                 <?php endif; ?>
+                                <?php if ($current_status != 0): ?>
                                 <th>Image</th>
+                                <?php endif; ?>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -93,17 +95,19 @@
                                 <td><?= $item['kd_teks'] ?></td>
                                 <td><?= strip_tags($item['teks']) ?></td>
                                 <td><?= strip_tags(substr($item['other_teks'], 0, 50)) ?>...</td>
-                                <?php if ($current_status != 1 && $current_status != 5): ?>
+                                <?php if ($current_status != 1 && $current_status != 5 && $current_status != 0 && $current_status != 6): ?>
                                 <td><span class="badge badge-<?= $item['status'] == 5 ? 'success' : 'secondary' ?>"><?= $item['status'] ?></span></td>
                                 <?php endif; ?>
-                                <?php if ($current_status != 1): ?>
+                                <?php if ($current_status != 1 && $current_status != 0 && $current_status != 6): ?>
                                 <td><?= $groupMap[$item['group_data']] ?? $item['group_data'] ?></td>
                                 <?php endif; ?>
+                                <?php if ($current_status != 0): ?>
                                 <td>
                                     <?php if ($item['img']): ?>
                                         <img src="<?= base_url('assets/themes/images/' . $item['img']) ?>" height="40">
                                     <?php endif; ?>
                                 </td>
+                                <?php endif; ?>
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm mb-1 btn-edit-package" data-item='<?= htmlspecialchars(json_encode($item), ENT_QUOTES, 'UTF-8') ?>'><i class="fas fa-edit"></i></button>
                                     <?php if ($item['status'] == 5 || $item['status'] == 1 || $item['status'] == 6): ?> <!-- Allow delete for packages, gallery, and pages -->
@@ -165,7 +169,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="image-form-group">
                     <label>Image</label>
                     <div id="current-img-container" class="mb-2 d-none">
                         <img id="current-img" src="" class="img-thumbnail" style="max-height: 150px;">
@@ -226,6 +230,8 @@
                 
                 // Hide Group fields
                 $('#group-data-container').hide();
+                // Show Image field
+                $('#image-form-group').show();
                 
                 // Image reset
                 $('#current-img-container').addClass('d-none');
@@ -253,6 +259,8 @@
                 
                 // Show Group fields
                 $('#group-data-container').show();
+                // Show Image field
+                $('#image-form-group').show();
                 
                 // Image reset
                 $('#current-img-container').addClass('d-none');
@@ -280,6 +288,8 @@
                 
                 // Hide Group fields (Only for Packages)
                 $('#group-data-container').hide();
+                // Show Image field
+                $('#image-form-group').show();
                 
                 // Image reset (Pages might have an image header? Optional)
                 $('#current-img-container').addClass('d-none');
@@ -316,6 +326,13 @@
                     $('#group-data-container').show();
                 } else {
                     $('#group-data-container').hide();
+                }
+
+                // Show/Hide Image based on item status
+                if (item.status == 0) {
+                     $('#image-form-group').hide();
+                } else {
+                     $('#image-form-group').show();
                 }
                 
                 // Image logic

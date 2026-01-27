@@ -60,6 +60,11 @@
 
             <div class="row justify-content-center pb-5">
                 <div class="col-lg-12">
+                     <?php if (!empty($page['img'])): ?>
+                        <div class="text-center mb-4">
+                            <img src="<?= base_url('assets/themes/images/' . $page['img']) ?>" class="img-fluid rounded shadow" alt="<?= $page['teks'] ?>">
+                        </div>
+                     <?php endif; ?>
                      <div class="ck-content">
                         <?= $page['other_teks'] ?>
                      </div>
