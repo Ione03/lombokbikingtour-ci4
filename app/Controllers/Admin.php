@@ -51,6 +51,14 @@ class Admin extends Controller
         $data['current_status'] = $status;
         $data['sort'] = $sort;
         $data['order'] = $order;
+        // Fetch counts for tabs
+        $data['counts'] = [
+            0 => $this->utamaModel->where('status', 0)->countAllResults(),
+            1 => $this->utamaModel->where('status', 1)->countAllResults(),
+            5 => $this->utamaModel->where('status', 5)->countAllResults(),
+            6 => $this->utamaModel->where('status', 6)->countAllResults(),
+        ];
+
         
         return view('admin/dashboard', $data);
     }

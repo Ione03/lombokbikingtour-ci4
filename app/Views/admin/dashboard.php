@@ -36,10 +36,10 @@
                 <h5 class="mb-0"><i class="fas fa-table mr-2"></i>Content Management</h5>
                 <div class="d-flex align-items-center">
                     <div class="btn-group mr-2">
-                        <a href="<?= base_url('admin/status/0') ?>" class="btn btn-sm btn-light <?= $current_status === '0' ? 'active font-weight-bold' : '' ?>">Basic Information</a>
-                        <a href="<?= base_url('admin/status/1') ?>" class="btn btn-sm btn-light <?= $current_status == 1 ? 'active font-weight-bold' : '' ?>">Gallery</a>                        
-                        <a href="<?= base_url('admin/status/5') ?>" class="btn btn-sm btn-light <?= $current_status == 5 ? 'active font-weight-bold' : '' ?>">Packages</a>
-                        <a href="<?= base_url('admin/status/6') ?>" class="btn btn-sm btn-light <?= $current_status == 6 ? 'active font-weight-bold' : '' ?>">Pages</a>
+                        <a href="<?= base_url('admin/status/0') ?>" class="btn btn-sm btn-light <?= $current_status === '0' ? 'active font-weight-bold' : '' ?>">Basic Information (<?= $counts[0] ?? 0 ?>)</a>
+                        <a href="<?= base_url('admin/status/1') ?>" class="btn btn-sm btn-light <?= $current_status == 1 ? 'active font-weight-bold' : '' ?>">Gallery (<?= $counts[1] ?? 0 ?>)</a>                        
+                        <a href="<?= base_url('admin/status/5') ?>" class="btn btn-sm btn-light <?= $current_status == 5 ? 'active font-weight-bold' : '' ?>">Packages (<?= $counts[5] ?? 0 ?>)</a>
+                        <a href="<?= base_url('admin/status/6') ?>" class="btn btn-sm btn-light <?= $current_status == 6 ? 'active font-weight-bold' : '' ?>">Pages (<?= $counts[6] ?? 0 ?>)</a>
                     </div>
                     <?php if ($current_status == 5): ?>
                         <button type="button" class="btn btn-sm btn-success btn-add-package"><i class="fas fa-plus"></i> Add Package</button>
