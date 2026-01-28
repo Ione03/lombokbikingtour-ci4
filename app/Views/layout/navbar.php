@@ -8,8 +8,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto my-2 my-lg-0">
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="<?= base_url() ?>#package">Package</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="<?= base_url() ?>#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="<?= base_url() ?>#package">Package</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="<?= base_url() ?>#galery">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="<?= base_url() ?>#testimonials">Testimonials</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="<?= base_url() ?>#contact">Contact</a></li>

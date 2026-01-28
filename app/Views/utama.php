@@ -293,6 +293,42 @@
         </div>
     </header>
 
+    <!-- About Section -->
+    <?php 
+        // Find Story01 from the value array
+        $story01 = null;
+        if (isset($value) && is_array($value)) {
+            foreach ($value as $item) {
+                if (isset($item['kd_teks']) && $item['kd_teks'] == 'Story01') {
+                    $story01 = $item;
+                    break;
+                }
+            }
+        }
+        
+        // Default values if Story01 not found
+        $aboutTitle = $story01['teks'] ?? 'About Lombok Biking Tour';
+        $aboutText = $story01['other_teks'] ?? 'Welcome to Lombok Biking Tour! Experience the amazing landscapes and culture of Lombok on two wheels.';
+        $aboutImage = $story01['img'] ?? 'about_us.png';
+    ?>
+    <section class="page-section" id="about">
+        <div class="container">
+            <h2 class="text-center mt-0"><?= htmlspecialchars($aboutTitle) ?></h2>
+            <hr class="divider my-3">
+            <div class="row align-items-center">
+                <div class="col-md-6 col-sm-12 mb-3">
+                    <img src="<?= base_url('assets/themes/images/' . $aboutImage) ?>" class="img-fluid rounded shadow" alt="<?= htmlspecialchars($aboutTitle) ?>">
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="text-muted">
+                        <?= nl2br(htmlspecialchars($aboutText)) ?>
+                    </div>
+                    <a class="btn btn-primary btn-xl mt-4 js-scroll-trigger" href="#package">Explore Our Tours</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
     <!-- Package Section -->
     <section class="page-section parallax-section" id="package" style="background-image: url('<?= base_url('assets/themes/images/paralax.1.jpg') ?>');">
         <div class="parallax-overlay"></div>
@@ -440,42 +476,6 @@
         </div>
     </div>
 
-    <!-- About Section -->
-    <?php 
-        // Find Story01 from the value array
-        $story01 = null;
-        if (isset($value) && is_array($value)) {
-            foreach ($value as $item) {
-                if (isset($item['kd_teks']) && $item['kd_teks'] == 'Story01') {
-                    $story01 = $item;
-                    break;
-                }
-            }
-        }
-        
-        // Default values if Story01 not found
-        $aboutTitle = $story01['teks'] ?? 'About Lombok Biking Tour';
-        $aboutText = $story01['other_teks'] ?? 'Welcome to Lombok Biking Tour! Experience the amazing landscapes and culture of Lombok on two wheels.';
-        $aboutImage = $story01['img'] ?? 'about_us.png';
-    ?>
-    <section class="page-section" id="about">
-        <div class="container">
-            <h2 class="text-center mt-0"><?= htmlspecialchars($aboutTitle) ?></h2>
-            <hr class="divider my-3">
-            <div class="row align-items-center">
-                <div class="col-md-6 col-sm-12 mb-3">
-                    <img src="<?= base_url('assets/themes/images/' . $aboutImage) ?>" class="img-fluid rounded shadow" alt="<?= htmlspecialchars($aboutTitle) ?>">
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="text-muted">
-                        <?= nl2br(htmlspecialchars($aboutText)) ?>
-                    </div>
-                    <a class="btn btn-primary btn-xl mt-4 js-scroll-trigger" href="#package">Explore Our Tours</a>
-                </div>
-            </div>
-        </div>
-    </section>
-    
     <!-- Gallery Section -->
     <section id="galery" class="page-section">
         <div class="container-fluid p-0">
