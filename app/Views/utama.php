@@ -441,6 +441,46 @@
             </div>
         </div>
     </section>
+
+    <!-- Testimonies Section -->
+    <section id="testimonials" class="page-section bg-light">
+        <div class="container">
+            <h2 class="text-center mt-0">Testimonials</h2>
+            <hr class="divider my-3">
+            <div class="row justify-content-center">
+                <?php
+                $testimony_count = 0;
+                if (isset($value) && is_array($value)) {
+                    foreach ($value as $item) {
+                        if (isset($item['status']) && $item['status'] == "2") {
+                            $test_name = $item['teks'] ?? 'Client';
+                            $test_content = $item['other_teks'] ?? '';
+                            $test_img = $item['img'] ?? 'default-avatar.png'; // Make sure you have a default or handle empty
+                            
+                            // Use default avatar if no image uploaded
+                            $img_src = $test_img ? base_url('assets/themes/images/' . $test_img) : 'https://via.placeholder.com/150?text=User';
+
+                            echo '<div class="col-lg-4 col-md-6 mb-4">';
+                            echo '  <div class="card h-100 border-0 shadow-sm">';
+                            echo '    <div class="card-body text-center">';
+                            echo '      <img src="' . $img_src . '" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;" alt="' . htmlspecialchars($test_name) . '">';
+                            echo '      <h5 class="card-title mb-1">' . htmlspecialchars($test_name) . '</h5>';
+                            echo '      <p class="card-text text-muted small"><i class="fa fa-quote-left mr-1"></i>' . htmlspecialchars($test_content) . '<i class="fa fa-quote-right ml-1"></i></p>';
+                            echo '    </div>';
+                            echo '  </div>';
+                            echo '</div>';
+                            $testimony_count++;
+                        }
+                    }
+                }
+                
+                if ($testimony_count == 0) {
+                    echo '<div class="col-lg-12 text-center text-muted"><p>No testimonials yet.</p></div>';
+                }
+                ?>
+            </div>
+        </div>
+    </section>
     
     <!-- YouTube Video Modal -->
     <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">

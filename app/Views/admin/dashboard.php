@@ -41,6 +41,7 @@
                         <a href="<?= base_url('admin/status/5') ?>" class="btn btn-sm btn-light <?= $current_status == 5 ? 'active font-weight-bold' : '' ?>">Packages (<?= $counts[5] ?? 0 ?>)</a>
                         <a href="<?= base_url('admin/status/6') ?>" class="btn btn-sm btn-light <?= $current_status == 6 ? 'active font-weight-bold' : '' ?>">Pages (<?= $counts[6] ?? 0 ?>)</a>
                         <a href="<?= base_url('admin/status/7') ?>" class="btn btn-sm btn-light <?= $current_status == 7 ? 'active font-weight-bold' : '' ?>">Slideshow (<?= $counts[7] ?? 0 ?>)</a>
+                        <a href="<?= base_url('admin/status/2') ?>" class="btn btn-sm btn-light <?= $current_status == 2 ? 'active font-weight-bold' : '' ?>">Testimonies (<?= $counts[2] ?? 0 ?>)</a>
                     </div>
                     <?php if ($current_status == 5): ?>
                         <button type="button" class="btn btn-sm btn-success btn-add-package"><i class="fas fa-plus"></i> Add Package</button>
@@ -50,6 +51,8 @@
                         <button type="button" class="btn btn-sm btn-success btn-add-page"><i class="fas fa-plus"></i> Add New Page</button>
                     <?php elseif ($current_status == 7): ?>
                         <button type="button" class="btn btn-sm btn-success btn-add-slideshow"><i class="fas fa-plus"></i> Add New Slideshow</button>
+                    <?php elseif ($current_status == 2): ?>
+                        <button type="button" class="btn btn-sm btn-success btn-add-testimony"><i class="fas fa-plus"></i> Add New Testimony</button>
                     <?php endif; ?>
                 </div>
             </div>
@@ -80,10 +83,10 @@
                                 <th><a href="?sort=kd_teks&order=<?= $newOrder ?>" class="text-dark d-block">ID <?= $icon('kd_teks') ?></a></th>
                                 <th><a href="?sort=teks&order=<?= $newOrder ?>" class="text-dark d-block">Title (Teks) <?= $icon('teks') ?></a></th>
                                 <th><a href="?sort=other_teks&order=<?= $newOrder ?>" class="text-dark d-block">Description (Other) <?= $icon('other_teks') ?></a></th>
-                                <?php if ($current_status != 1 && $current_status != 5 && $current_status != 0 && $current_status != 6 && $current_status != 7): ?>
+                                <?php if ($current_status != 1 && $current_status != 5 && $current_status != 0 && $current_status != 6 && $current_status != 7 && $current_status != 2): ?>
                                 <th>Status</th>
                                 <?php endif; ?>
-                                <?php if ($current_status != 1 && $current_status != 0 && $current_status != 6 && $current_status != 7): ?>
+                                <?php if ($current_status != 1 && $current_status != 0 && $current_status != 6 && $current_status != 7 && $current_status != 2): ?>
                                 <th>Group</th>
                                 <?php endif; ?>
                                 <?php if ($current_status != 0): ?>
@@ -98,10 +101,10 @@
                                 <td><?= $item['kd_teks'] ?></td>
                                 <td><?= strip_tags($item['teks']) ?></td>
                                 <td><?= strip_tags(substr($item['other_teks'], 0, 50)) ?>...</td>
-                                <?php if ($current_status != 1 && $current_status != 5 && $current_status != 0 && $current_status != 6 && $current_status != 7): ?>
+                                <?php if ($current_status != 1 && $current_status != 5 && $current_status != 0 && $current_status != 6 && $current_status != 7 && $current_status != 2): ?>
                                 <td><span class="badge badge-<?= $item['status'] == 5 ? 'success' : 'secondary' ?>"><?= $item['status'] ?></span></td>
                                 <?php endif; ?>
-                                <?php if ($current_status != 1 && $current_status != 0 && $current_status != 6 && $current_status != 7): ?>
+                                <?php if ($current_status != 1 && $current_status != 0 && $current_status != 6 && $current_status != 7 && $current_status != 2): ?>
                                 <td><?= $groupMap[$item['group_data']] ?? $item['group_data'] ?></td>
                                 <?php endif; ?>
                                 <?php if ($current_status != 0): ?>
@@ -113,7 +116,7 @@
                                 <?php endif; ?>
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm mb-1 btn-edit-package" data-item='<?= htmlspecialchars(json_encode($item), ENT_QUOTES, 'UTF-8') ?>'><i class="fas fa-edit"></i></button>
-                                    <?php if ($item['status'] == 5 || $item['status'] == 1 || $item['status'] == 6 || $item['status'] == 7): ?> <!-- Allow delete for packages, gallery, pages, slideshow -->
+                                    <?php if ($item['status'] == 5 || $item['status'] == 1 || $item['status'] == 6 || $item['status'] == 7 || $item['status'] == 2): ?> <!-- Allow delete for packages, gallery, pages, slideshow, testimony -->
                                     <a href="<?= base_url('admin/delete/' . $item['kd_teks']) ?>" class="btn btn-danger btn-sm mb-1" onclick="return confirm('Are you sure you want to delete this item?');"><i class="fas fa-trash"></i></a>
                                     <?php endif; ?>
                                 </td>
@@ -333,6 +336,36 @@
                 $('#old_img').val('');
                 $('#delete_img').val('0');
                 $('.custom-file-label').html('Choose new image...');
+                
+                // Clear CKEditor 5
+                if (editorInstance) {
+                    editorInstance.setData('');
+                }
+
+                $('#crudModal').modal('show');
+            });
+
+            // Add Testimony Button
+            $('.btn-add-testimony').click(function() {
+                $('#crudModalLabel').text('Create New Testimony');
+                $('#crudForm').attr('action', '<?= base_url('admin/store') ?>');
+                $('#crudForm')[0].reset();
+                $('#group-kd_teks').show(); // Show ID input
+                
+                // Default values for Testimony
+                $('#status').val('2');
+                $('#group_data').val('1');
+                
+                // Hide Group fields
+                $('#group-data-container').hide();
+                // Show Image field
+                $('#image-form-group').show();
+                
+                // Image reset
+                $('#current-img-container').addClass('d-none');
+                $('#old_img').val('');
+                $('#delete_img').val('0');
+                $('.custom-file-label').html('Choose person photo...');
                 
                 // Clear CKEditor 5
                 if (editorInstance) {

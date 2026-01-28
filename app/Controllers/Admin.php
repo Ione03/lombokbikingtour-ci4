@@ -58,6 +58,7 @@ class Admin extends Controller
             5 => $this->utamaModel->where('status', 5)->countAllResults(),
             6 => $this->utamaModel->where('status', 6)->countAllResults(),
             7 => $this->utamaModel->where('status', 7)->countAllResults(),
+            2 => $this->utamaModel->where('status', 2)->countAllResults(),
         ];
 
         
