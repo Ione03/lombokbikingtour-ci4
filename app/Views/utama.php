@@ -83,6 +83,25 @@
             animation: scrollBounce 2s ease-in-out;
         }
         
+        /* Parallax section styling */
+        .parallax-section {
+            position: relative;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .parallax-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(244, 98, 58, 0.85); /* Primary color overlay */
+            z-index: 0;
+        }
+        
         /* Video Gallery Styles */
         .video-box {
             position: relative;
@@ -222,15 +241,14 @@
             </div>
         <?php else: ?>
             <?php foreach ($slides as $index => $slide): ?>
-                <div class="masthead-slide <?= $index === 0 ? 'active' : '' ?>" style="background-image: linear-gradient(to bottom, rgba(92,245,255,0.2) 0%, rgba(92, 77, 66, 0.5) 100%), url('<?= base_url('assets/themes/images/' . $slide['img']) ?>');">
-                    <div class="container h-100">
+                <div class="masthead-slide <?= $index === 0 ? 'active' : '' ?>" style="background-image: linear-gradient(to bottom, rgba(92,245,255,0.2) 0%, rgba(92, 77, 66, 0.5) 100%), url('<?= base_url('assets/themes/images/' . $slide['img']) ?>');">                    <div class="container h-100">
                         <div class="row h-100 align-items-center justify-content-center text-center">
                             <div class="col-lg-10 align-self-end">
                                 <h1 class="text-white font-weight-bold"><?= $slide['teks'] ?? '' ?></h1>
                                 <hr class="divider my-4">
                             </div>
                             <div class="col-lg-8 align-self-baseline">
-                                <p class="text-white-75 font-weight-light mb-5"><?= $slide['other_teks'] ?? '' ?></p>
+                                <p class="text-white-75 font-weight-light mb-5"><?= strip_tags($slide['other_teks'] ?? '') ?></p>
                                 <a class="btn btn-primary btn-xl js-scroll-trigger" href="#package">Find Out More</a>
                             </div>
                         </div>
@@ -262,8 +280,9 @@
     </header>
 
     <!-- Package Section -->
-    <section class="page-section bg-primary" id="package">
-        <div class="container">
+    <section class="page-section parallax-section" id="package" style="background-image: url('<?= base_url('assets/themes/images/paralax.1.jpg') ?>');">
+        <div class="parallax-overlay"></div>
+        <div class="container position-relative" style="z-index: 1;">
             <h2 class="text-center text-white mb-4">Our Tour Packages</h2>
             <div class="row">
                 <div class="col-sm-12 col-lg-12 mb-4 text-center">
