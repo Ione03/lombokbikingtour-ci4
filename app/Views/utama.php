@@ -34,6 +34,27 @@
         p, .text-muted, .card-text, small {
             font-family: 'Inter', sans-serif !important;
         }
+
+        /* Prevent modal flicker - keep scrollbar always visible */
+        html {
+            overflow-y: scroll;
+        }
+        
+        /* CRITICAL: Prevent Bootstrap AND Magnific Popup from hiding scrollbar */
+        body {
+            overflow: visible !important;
+        }
+        
+        /* Prevent Bootstrap from adding padding when modal opens */
+        body.modal-open,
+        .modal-open .modal {
+            padding-right: 0 !important;
+        }
+        
+        /* Allow modal content to scroll independently */
+        .modal {
+            overflow-y: auto;
+        }
         
         /* Video Gallery Styles */
         .video-box {
@@ -855,6 +876,17 @@
             // Clear video when modal is closed
             $('#videoModal').on('hidden.bs.modal', function () {
                 $('#videoIframe').attr('src', '');
+            });
+            
+            // Preserve scroll position when modals open
+            var scrollPosition = 0;
+            
+            $('#packageModal, #videoModal').on('show.bs.modal', function () {
+                scrollPosition = $(window).scrollTop();
+            });
+            
+            $('#packageModal, #videoModal').on('shown.bs.modal', function () {
+                $(window).scrollTop(scrollPosition);
             });
             
             // Initialize Captcha on load
