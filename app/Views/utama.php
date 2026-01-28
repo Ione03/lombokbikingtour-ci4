@@ -51,9 +51,36 @@
             padding-right: 0 !important;
         }
         
-        /* Allow modal content to scroll independently */
-        .modal {
+        /* Modal scrolls internally when content overflows */
+        .modal-dialog {
+            max-height: 90vh;
+            margin: 1.75rem auto;
+        }
+        
+        .modal-content {
+            max-height: 90vh;
+        }
+        
+        .modal-body {
             overflow-y: auto;
+            max-height: calc(90vh - 120px); /* Account for header and footer */
+        }
+        
+        /* Scroll hint animation */
+        @keyframes scrollBounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(10px);
+            }
+            60% {
+                transform: translateY(5px);
+            }
+        }
+        
+        .modal-body.scroll-hint {
+            animation: scrollBounce 2s ease-in-out;
         }
         
         /* Video Gallery Styles */
@@ -281,7 +308,7 @@
                                     <img src="<?= base_url('assets/themes/images/' . $item['img']) ?>" class="package-card-img" alt="<?= htmlspecialchars($item['teks']) ?>">
                                     <span class="package-badge">#<?= $item['kd_teks'] ?></span>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body ck-content">
                                     <h5 class="card-title"><?= $item['teks'] ?></h5>
                                     <p class="card-text"><?= $tmp_text ?>...</p>
                                     <button class="btn btn-view-details">View Details</button>
@@ -309,16 +336,16 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <h3 id="modalPackageTitle" class="mb-3"></h3>
                     <img src="" id="modalPackageImage" class="package-modal-img" alt="Package Image">
-                    <h3 id="modalPackageTitle"></h3>
-                    <div id="modalPackageDescription" style="white-space: pre-line; line-height: 1.8; color: #4a5568;"></div>
+                    <div id="modalPackageDescription" class="ck-content" style="line-height: 1.8; color: #4a5568;"></div>
                     
                     <hr>
                     <h5 class="mt-4">Book This Tour</h5>
                     <form id="bookingForm">
                         <div class="form-group">
                             <label for="bookDate">Date of Tour</label>
-                            <input type="date" class="form-control" id="bookDate" required>
+                            <input type="date" class="form-control" id="bookDate" onkeydown="return false;" onclick="openDatePicker(this)" style="cursor: pointer; max-width: 250px;" required>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -785,7 +812,31 @@
                 modal.find('#modalPackageImage').attr('src', packageImage);
                 modal.find('.modal-title').text('Package #' + packageId + ' Details');
             });
+            
+            // Add scroll hint animation when modal is shown
+            $('#packageModal').on('shown.bs.modal', function () {
+                var modalBody = $(this).find('.modal-body');
+                // Only show hint if content is scrollable
+                if (modalBody[0].scrollHeight > modalBody[0].clientHeight) {
+                    modalBody.addClass('scroll-hint');
+                    // Remove class after animation completes
+                    setTimeout(function() {
+                        modalBody.removeClass('scroll-hint');
+                    }, 2000);
+                }
+            });
         });
+        
+        // Function to open date picker
+        function openDatePicker(input) {
+            if (input.showPicker) {
+                input.showPicker();
+            } else {
+                // Fallback for browsers that don't support showPicker
+                input.focus();
+            }
+        }
+        
         // Initialize WhatsApp booking
         function sendBookingWA() {
             var date = $('#bookDate').val();
@@ -1019,7 +1070,7 @@
                                 '            <img src="' + imgUrl + '" class="package-card-img" alt="' + (value.teks || '').replace(/"/g, '&quot;') + '">' +
                                 '            <span class="package-badge">#' + value.kd_teks + '</span>' +
                                 '        </div>' +
-                                '        <div class="card-body">' +
+                                '        <div class="card-body ck-content">' +
                                 '            <h5 class="card-title">' + value.teks + '</h5>' +
                                 '            <p class="card-text">' + tmp_text + '...</p>' +
                                 '            <button class="btn btn-view-details">View Details</button>' +
