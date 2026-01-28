@@ -219,13 +219,17 @@
                                 <td><span class="badge badge-<?= $item['status'] == 5 ? 'success' : 'secondary' ?>"><?= $item['status'] ?></span></td>
                                 <?php endif; ?>
                                 <?php if ($current_status != 1 && $current_status != 0 && $current_status != 6 && $current_status != 7 && $current_status != 2): ?>
-                                <td><?= $groupMap[$item['group_data']] ?? $item['group_data'] ?></td>
+                                <td><?= $groupMap[$item['group_data']] ?? '-' ?></td>
                                 <?php endif; ?>
                                 <td>
-                                    <?php if ($item['img']): ?>
-                                        <img src="<?= base_url('assets/themes/images/' . $item['img']) ?>" height="40" class="img-thumbnail">
+                                    <?php if (!empty($item['img'])): ?>
+                                        <img src="<?= base_url('assets/themes/images/' . $item['img']) ?>" 
+                                             alt="<?= htmlspecialchars($item['teks']) ?>" 
+                                             class="img-thumbnail" 
+                                             style="max-width: 80px; max-height: 60px; object-fit: cover; cursor: pointer;"
+                                             onclick="window.open('<?= base_url('assets/themes/images/' . $item['img']) ?>', '_blank')">
                                     <?php else: ?>
-                                        <span class="text-muted">No image</span>
+                                        <span class="text-muted small">No image</span>
                                     <?php endif; ?>
                                 </td>
                                 <td>

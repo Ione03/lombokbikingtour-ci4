@@ -51,7 +51,7 @@
             <h2 class="text-uppercase font-weight-bold text-primary pt-4"><?= $page['teks'] ?></h2>
             
             <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb">
+            <nav aria-label="breadcrumb" class="pb-4">
                 <ol class="breadcrumb bg-transparent p-0">
                     <li class="breadcrumb-item"><a class="text-primary" href="<?= base_url() ?>">Home</a></li>
                     <li class="breadcrumb-item active text-muted" aria-current="page"><?= $page['teks'] ?></li>
