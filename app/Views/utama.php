@@ -514,7 +514,7 @@
                                 $test_name = $item['teks'] ?? 'Client';
                                 $test_content = $item['other_teks'] ?? ''; // Allows HTML
                                 $test_img = $item['img'] ?? '';
-                                $img_src = $test_img ? base_url('assets/themes/images/' . $test_img) : 'https://via.placeholder.com/150?text=User';
+                                $img_src = $test_img ? base_url('assets/themes/images/' . $test_img) : 'https://ui-avatars.com/api/?name=' . urlencode($test_name) . '&size=120&background=f4623a&color=fff';
                             ?>
                             <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
                                 <div class="row justify-content-center">
@@ -525,7 +525,7 @@
                                         <h5 class="mb-3 font-weight-bold"><?= htmlspecialchars($test_name) ?></h5>
                                         <div class="testimonial-content text-muted">
                                             <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-                                            <div class="font-italic" style="font-size: 1.1rem; line-height: 1.8;">
+                                            <div class="font-italic ck-content" style="font-size: 1.1rem; line-height: 1.8;">
                                                 <?= $test_content ?>
                                             </div>
                                         </div>
