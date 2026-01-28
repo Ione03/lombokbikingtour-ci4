@@ -46,6 +46,8 @@
                 </div>                
             </div>
             
+            <hr class="my-4">
+            
             <div class="small text-center text-muted mt-5 ">
                 Copyright &copy; 2026 - LombokBikingTour.com<br>
                 <span class="d-block mt-2">
