@@ -11,15 +11,102 @@
         .modal {
             overflow-y: auto;
         }
+        
+        /* Responsive Tab Navigation */
+        .card-header .btn-group {
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .card-header .btn-group .btn {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Mobile Header Fixes */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start !important;
+                padding: 1rem;
+            }
+            
+            .navbar div {
+                margin-top: 0.5rem;
+                width: 100%;
+            }
+            
+            .navbar div a {
+                display: block;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .card-header {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+            }
+            
+            .card-header h5 {
+                margin-bottom: 1rem !important;
+            }
+            
+            .card-header .d-flex {
+                width: 100%;
+                flex-direction: column !important;
+            }
+            
+            .card-header .btn-group {
+                width: 100%;
+                flex-direction: column !important;
+            }
+            
+            .card-header .btn-group .btn {
+                width: 100%;
+                text-align: left;
+            }
+            
+            .btn-add-package,
+            .btn-add-gallery,
+            .btn-add-page,
+            .btn-add-slideshow,
+            .btn-add-testimony {
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+        }
+        
+        /* Table improvements */
+        .table-responsive {
+            margin-bottom: 0;
+        }
+        
+        /* Active tab highlight */
+        .btn-group .btn.active {
+            background-color: #28a745 !important;
+            border-color: #28a745 !important;
+            color: white !important;
+        }
     </style>
 </head>
 <body class="bg-light">
-    <nav class="navbar navbar-dark bg-dark mb-4">
-        <a class="navbar-brand" href="#">Lombok Biking Tour Admin</a>
-        <div>
-            <a href="https://www.histats.com/viewstats/?act=2&sid=5005008" class="btn btn-outline-light btn-sm mr-2" target="_blank">Website Visitor</a>
-            <a href="<?= base_url() ?>" class="btn btn-outline-light btn-sm mr-2" target="_blank">View Site</a>
-            <a href="<?= base_url('admin/logout') ?>" class="btn btn-danger btn-sm">Logout</a>
+    <nav class="navbar navbar-dark bg-dark mb-4 d-flex flex-wrap justify-content-between align-items-center">
+        <a class="navbar-brand mb-2 mb-md-0" href="#">Lombok Biking Tour Admin</a>
+        <div class="btn-group">
+            <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-bars"></i> Menu
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="https://www.histats.com/viewstats/?act=2&sid=5005008" target="_blank">
+                    <i class="fas fa-chart-line"></i> Website Visitor
+                </a>
+                <a class="dropdown-item" href="<?= base_url() ?>" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> View Site
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item text-danger" href="<?= base_url('admin/logout') ?>">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
         </div>
     </nav>
 
@@ -35,13 +122,42 @@
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="fas fa-table mr-2"></i>Content Management</h5>
                 <div class="d-flex align-items-center">
+                    <!-- Content Type Dropdown -->
                     <div class="btn-group mr-2">
-                        <a href="<?= base_url('admin/status/0') ?>" class="btn btn-sm btn-light <?= $current_status === '0' ? 'active font-weight-bold' : '' ?>">Basic Information (<?= $counts[0] ?? 0 ?>)</a>
-                        <a href="<?= base_url('admin/status/1') ?>" class="btn btn-sm btn-light <?= $current_status == 1 ? 'active font-weight-bold' : '' ?>">Gallery (<?= $counts[1] ?? 0 ?>)</a>                        
-                        <a href="<?= base_url('admin/status/5') ?>" class="btn btn-sm btn-light <?= $current_status == 5 ? 'active font-weight-bold' : '' ?>">Packages (<?= $counts[5] ?? 0 ?>)</a>
-                        <a href="<?= base_url('admin/status/6') ?>" class="btn btn-sm btn-light <?= $current_status == 6 ? 'active font-weight-bold' : '' ?>">Pages (<?= $counts[6] ?? 0 ?>)</a>
-                        <a href="<?= base_url('admin/status/7') ?>" class="btn btn-sm btn-light <?= $current_status == 7 ? 'active font-weight-bold' : '' ?>">Slideshow (<?= $counts[7] ?? 0 ?>)</a>
-                        <a href="<?= base_url('admin/status/2') ?>" class="btn btn-sm btn-light <?= $current_status == 2 ? 'active font-weight-bold' : '' ?>">Testimonies (<?= $counts[2] ?? 0 ?>)</a>
+                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-folder"></i> 
+                            <?php
+                                $statusLabels = [
+                                    '0' => 'Basic Information',
+                                    '1' => 'Gallery',
+                                    '5' => 'Packages',
+                                    '6' => 'Pages',
+                                    '7' => 'Slideshow',
+                                    '2' => 'Testimonies'
+                                ];
+                                echo $statusLabels[$current_status] ?? 'Select Type';
+                            ?>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item <?= $current_status === '0' ? 'active' : '' ?>" href="<?= base_url('admin/status/0') ?>">
+                                <i class="fas fa-info-circle"></i> Basic Information (<?= $counts[0] ?? 0 ?>)
+                            </a>
+                            <a class="dropdown-item <?= $current_status == 1 ? 'active' : '' ?>" href="<?= base_url('admin/status/1') ?>">
+                                <i class="fas fa-images"></i> Gallery (<?= $counts[1] ?? 0 ?>)
+                            </a>
+                            <a class="dropdown-item <?= $current_status == 5 ? 'active' : '' ?>" href="<?= base_url('admin/status/5') ?>">
+                                <i class="fas fa-box"></i> Packages (<?= $counts[5] ?? 0 ?>)
+                            </a>
+                            <a class="dropdown-item <?= $current_status == 6 ? 'active' : '' ?>" href="<?= base_url('admin/status/6') ?>">
+                                <i class="fas fa-file"></i> Pages (<?= $counts[6] ?? 0 ?>)
+                            </a>
+                            <a class="dropdown-item <?= $current_status == 7 ? 'active' : '' ?>" href="<?= base_url('admin/status/7') ?>">
+                                <i class="fas fa-sliders-h"></i> Slideshow (<?= $counts[7] ?? 0 ?>)
+                            </a>
+                            <a class="dropdown-item <?= $current_status == 2 ? 'active' : '' ?>" href="<?= base_url('admin/status/2') ?>">
+                                <i class="fas fa-comments"></i> Testimonies (<?= $counts[2] ?? 0 ?>)
+                            </a>
+                        </div>
                     </div>
                     <?php if ($current_status == 5): ?>
                         <button type="button" class="btn btn-sm btn-success btn-add-package"><i class="fas fa-plus"></i> Add Package</button>
