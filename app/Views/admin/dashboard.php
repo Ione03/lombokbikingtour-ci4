@@ -268,7 +268,7 @@
 
                 <div class="form-group">
                     <label for="other_teks">Description / Other Text</label>
-                    <textarea class="form-control" id="other_teks" name="other_teks" rows="4" required></textarea>
+                    <textarea class="form-control" id="other_teks" name="other_teks" rows="4"></textarea>
                     <small class="form-text text-muted">Use this for descriptions, secondary text, or extended content.</small>
                 </div>
 
@@ -332,6 +332,14 @@
                 .catch(error => {
                     console.error(error);
                 });
+            
+            // Form submit handler - sync CKEditor data before submission
+            $('#crudForm').on('submit', function(e) {
+                if (editorInstance) {
+                    $('#other_teks').val(editorInstance.getData());
+                }
+                // Form will submit normally after this
+            });
 
             // File input label change
             $('body').on('change', '.custom-file-input', function() {
@@ -535,6 +543,10 @@
                     $('#group-data-container').show();
                 } else {
                     $('#group-data-container').hide();
+                    // Set default group_data value for hidden field
+                    if (!item.group_data || item.group_data == '') {
+                        $('#group_data').val('1');
+                    }
                 }
 
                 // Show/Hide Image based on item status (all types can have images now)

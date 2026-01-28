@@ -32,17 +32,43 @@
                 <div class="col-lg-3 mb-4 mb-lg-0">
                     <h4 class="text-uppercase mb-4">Quick Links</h4>
                     <ul class="list-unstyled">                        
-                        <li><a href="<?= base_url('page/payment') ?>">Payment</a></li>
+                        <li><a href="<?= base_url('page/bike-tour') ?>">Bike Tour</a></li>
                         <li><a href="<?= base_url('page/privacy-policy') ?>">Privacy Policy</a></li>
                         <li><a href="<?= base_url('page/term-of-use') ?>">Term of Use</a></li>
+                        <li><a href="<?= base_url('page/payment') ?>">Payment</a></li>
                         <li><a href="<?= base_url('page/faq') ?>">FAQ</a></li>                        
                     </ul>
                 </div>
                 <div class="col-lg-3 ">
                     <h4 class="text-uppercase mb-4">Follow Us</h4>
-                    <a class="footer-social-link" href="#"><i class="fa fa-facebook"></i></a>
-                    <a class="footer-social-link" href="#"><i class="fa fa-instagram"></i></a>
-                    <a class="footer-social-link" href="#"><i class="fa fa-twitter"></i></a>                    
+                    <?php 
+                        $linkYoutube = '';
+                        $linkFb = '';
+                        $linkInstagram = '';
+                        $linkTwitter = '';
+                        if (isset($value) && is_array($value)) {
+                            foreach ($value as $item) {
+                                if (isset($item['kd_teks'])) {
+                                    if ($item['kd_teks'] == 'LinkYoutube') $linkYoutube = $item['teks'];
+                                    if ($item['kd_teks'] == 'LinkFb') $linkFb = $item['teks'];
+                                    if ($item['kd_teks'] == 'LinkInstagram') $linkInstagram = $item['teks'];
+                                    if ($item['kd_teks'] == 'LinkTwitter') $linkTwitter = $item['teks'];
+                                }
+                            }
+                        }
+                    ?>
+                    <?php if ($linkYoutube): ?>
+                        <a class="footer-social-link" href="<?= $linkYoutube ?>" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+                    <?php endif; ?>
+                    <?php if ($linkFb): ?>
+                        <a class="footer-social-link" href="<?= $linkFb ?>" target="_blank" title="Facebook"><i class="fa fa-facebook"></i></a>
+                    <?php endif; ?>
+                    <?php if ($linkInstagram): ?>
+                        <a class="footer-social-link" href="<?= $linkInstagram ?>" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+                    <?php endif; ?>
+                    <?php if ($linkTwitter): ?>
+                        <a class="footer-social-link" href="<?= $linkTwitter ?>" target="_blank" title="X (Twitter)"><i class="fa fa-twitter"></i></a>
+                    <?php endif; ?>
                 </div>                
             </div>
             

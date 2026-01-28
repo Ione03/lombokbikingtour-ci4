@@ -874,7 +874,7 @@
                 
                 // Update modal content
                 var modal = $(this);
-                modal.find('#modalPackageTitle').text(packageTitle);
+                modal.find('#modalPackageTitle').text(packageTitle).data('package-id', packageId);
                 
                 // Render HTML in description (support <b>, <i>, <p>, <br>, etc.)
                 modal.find('#modalPackageDescription').html(packageDescription);
@@ -954,6 +954,7 @@
             var bikeNumber = $('#bikeNumber').val();
             var note = $('#bookNote').val();
             var packageTitle = $('#modalPackageTitle').text();
+            var packageId = $('#modalPackageTitle').data('package-id') || 'N/A';
             var captchaInput = parseInt($('#modal-captcha').val());
             var captchaAnswer = parseInt($('#modal-captcha-answer').val());
             
@@ -969,6 +970,7 @@
             }
             
             var text = "Hi, I would like to book a tour:\n" +
+                       "Package ID: " + packageId + "\n" +
                        "Package: " + packageTitle + "\n" +
                        "Date: " + date + "\n" +
                        "Bike Type: " + bikeType + "\n" +
