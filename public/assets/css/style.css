@@ -219,7 +219,7 @@ select option {
     height: 50px;
     text-align: center;
     color: white;
-    background: rgba(244, 98, 58, 0.8);
+    background: rgba(211, 47, 47, 0.8);
     line-height: 46px;
     border-radius: 5px;
     z-index: 999;
@@ -229,7 +229,7 @@ select option {
 .scroll-to-top:focus,
 .scroll-to-top:hover {
     color: white;
-    background: #f4623a;
+    background: #d32f2f;
 }
 
 .scroll-to-top i {
@@ -241,7 +241,7 @@ select option {
     display: inline-block;
     height: 3.5rem;
     width: 3.5rem;
-    background-color: #f4623a;
+    background-color: #d32f2f;
     color: white;
     border-radius: 100%;
     text-align: center;
@@ -252,8 +252,29 @@ select option {
 }
 
 .footer-social-link:hover {
-    background-color: #d94c25;
+    background-color: #b32626;
     color: white;
+}
+
+/* Footer Quick Links Hover */
+footer a {
+    color: #6c757d;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #d32f2f;
+    text-decoration: none;
+}
+
+/* General Link Hover Consistency */
+a {
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #d32f2f;
 }
 
 /* Navbar Toggler Border Removal */
@@ -316,7 +337,7 @@ select option {
 }
 
 #mainNav.navbar-scrolled .navbar-brand {
-    color: #f4623a;
+    color: #d32f2f;
 }
 
 #mainNav.navbar-scrolled .nav-link {
@@ -335,7 +356,7 @@ select option {
 }
 
 #mainNav:not(.navbar-scrolled) .nav-link:hover {
-    color: #f4623a;
+    color: #d32f2f;
 }
 
 /* Mobile Menu styling for transparent navbar */
@@ -348,7 +369,7 @@ select option {
     }
 
     #mainNav .navbar-brand {
-        color: #f4623a !important;
+        color: #d32f2f !important;
         text-shadow: none !important;
     }
 
@@ -365,7 +386,7 @@ select option {
 
 /* Captcha Styling */
 .input-group-text {
-    background-color: #f4623a;
+    background-color: #d32f2f;
     color: white;
     border: none;
     font-weight: bold;
@@ -430,7 +451,7 @@ input[type=number] {
 }
 
 .ck-content a {
-    color: #f4623a;
+    color: #d32f2f;
     text-decoration: underline;
 }
 
@@ -439,7 +460,7 @@ input[type=number] {
 }
 
 .ck-content blockquote {
-    border-left: 5px solid #f4623a;
+    border-left: 5px solid #d32f2f;
     padding-left: 1rem;
     margin-left: 0;
     margin-right: 0;
@@ -469,6 +490,6 @@ input[type=number] {
 }
 
 .ck-content table th {
-    background-color: #f4623a;
+    background-color: #d32f2f;
     color: white;
 }

@@ -98,7 +98,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(244, 98, 58, 0.85); /* Primary color overlay */
+            background: rgba(211, 47, 47, 0.85); /* Primary color overlay */
             z-index: 0;
         }
         
@@ -120,7 +120,7 @@
         }
         
         .video-box:hover .video-play-overlay {
-            color: #f4623a;
+            color: #d32f2f;
             transform: translate(-50%, -50%) scale(1.2);
         }
         
@@ -147,7 +147,7 @@
         }
         
         .contact-info a.btn-link:hover {
-            color: #f4623a;
+            color: #d32f2f;
         }
     </style>
     
@@ -533,7 +533,7 @@
                                 $test_name = $item['teks'] ?? 'Client';
                                 $test_content = $item['other_teks'] ?? ''; // Allows HTML
                                 $test_img = $item['img'] ?? '';
-                                $img_src = $test_img ? base_url('assets/themes/images/' . $test_img) : 'https://ui-avatars.com/api/?name=' . urlencode($test_name) . '&size=120&background=f4623a&color=fff';
+                                $img_src = $test_img ? base_url('assets/themes/images/' . $test_img) : 'https://ui-avatars.com/api/?name=' . urlencode($test_name) . '&size=120&background=d32f2f&color=fff';
                             ?>
                             <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
                                 <div class="row justify-content-center">
@@ -674,7 +674,7 @@
                                 <label class="text-white small mb-1" style="display:block;">Verify you are human:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text" id="captcha-question" style="background:#f4623a; color:white; min-width:80px; justify-content:center;">? + ?</span>
+                                        <span class="input-group-text" id="captcha-question" style="background:#d32f2f; color:white; min-width:80px; justify-content:center;">? + ?</span>
                                     </div>
                                     <input type="number" class="form-control" id="cf-captcha" placeholder="Total?" required style="height:auto;">
                                 </div>
