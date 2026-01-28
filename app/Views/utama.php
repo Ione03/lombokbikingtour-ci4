@@ -17,7 +17,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Lombok Biking Tour - Explore Lombok on Two Wheels">
     <meta name="twitter:description" content="Experience the best biking adventures in Lombok with professional guides and top-quality equipment.">
-    <meta name="twitter:image" content="<?= base_url('assets/themes/img/Logo.png') ?>"
+    <meta name="twitter:image" content="<?= base_url('assets/themes/img/Logo.png') ?>">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
