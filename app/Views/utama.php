@@ -837,7 +837,7 @@
     <script>
         $(document).ready(function() {
             // Initialize Magnific Popup for image gallery
-            $('.portfolio-box').magnificPopup({
+            $('.portfolio-box:not(.video-box)').magnificPopup({
                 type: 'image',
                 gallery: {
                     enabled: true
