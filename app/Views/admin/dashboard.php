@@ -342,6 +342,12 @@
                 if (editorInstance) {
                     $('#other_teks').val(editorInstance.getData());
                 }
+                
+                // Disable submit button to prevent double submission
+                var $submitBtn = $(this).find('button[type="submit"]');
+                $submitBtn.prop('disabled', true);
+                $submitBtn.html('<i class="fas fa-spinner fa-spin"></i> Saving...');
+                
                 // Form will submit normally after this
             });
 
