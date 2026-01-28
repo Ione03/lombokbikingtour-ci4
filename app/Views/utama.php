@@ -216,7 +216,7 @@
                         </div>
                         <div class="col-lg-8 align-self-baseline">
                             <p class="text-white-75 font-weight-light mb-5"><?= $teks_other_01 ?: 'Experience the beauty of Lombok on two wheels' ?></p>
-                            <a class="btn btn-primary btn-xl js-scroll-trigger" href="#package">Find Out More</a>
+                            <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">Read More</a>
                         </div>
                     </div>
                 </div>
@@ -263,7 +263,7 @@
                             </div>
                             <div class="col-lg-8 align-self-baseline">
                                 <p class="text-white-75 font-weight-light mb-5"><?= strip_tags($slide['other_teks'] ?? '') ?></p>
-                                <a class="btn btn-primary btn-xl js-scroll-trigger" href="#package">Find Out More</a>
+                                <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">Read More</a>
                             </div>
                         </div>
                     </div>
@@ -315,15 +315,16 @@
         <div class="container">
             <h2 class="text-center mt-0"><?= htmlspecialchars($aboutTitle) ?></h2>
             <hr class="divider my-3">
-            <div class="row align-items-center">
-                <div class="col-md-6 col-sm-12 mb-3">
-                    <img src="<?= base_url('assets/themes/images/' . $aboutImage) ?>" class="img-fluid rounded shadow" alt="<?= htmlspecialchars($aboutTitle) ?>">
+            <div class="clearfix">
+                <img src="<?= base_url('assets/themes/images/' . $aboutImage) ?>" 
+                     class="img-fluid rounded shadow float-left mr-4 mb-3" 
+                     alt="<?= htmlspecialchars($aboutTitle) ?>"
+                     style="max-width: 400px; width: 100%;">
+                <div class="text-muted" style="text-align: justify;">
+                    <?= nl2br(htmlspecialchars($aboutText)) ?>
                 </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="text-muted">
-                        <?= nl2br(htmlspecialchars($aboutText)) ?>
-                    </div>
-                    <a class="btn btn-primary btn-xl mt-4 js-scroll-trigger" href="#package">Explore Our Tours</a>
+                <div class="text-center mt-4">
+                    <a class="btn btn-primary btn-xl js-scroll-trigger" href="#package">Explore Our Tours</a>
                 </div>
             </div>
         </div>
