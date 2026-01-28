@@ -321,7 +321,7 @@
                      alt="<?= htmlspecialchars($aboutTitle) ?>"
                      style="max-width: 400px; width: 100%;">
                 <div class="text-muted" style="text-align: justify;">
-                    <?= nl2br(htmlspecialchars($aboutText)) ?>
+                    <?= nl2br($aboutText) ?>
                 </div>
                 <div class="text-center mt-4">
                     <a class="btn btn-primary btn-xl js-scroll-trigger" href="#package">Explore Our Tours</a>
