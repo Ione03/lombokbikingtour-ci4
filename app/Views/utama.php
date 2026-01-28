@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lombok Biking Tour</title>
     
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="Lombok Biking Tour - Explore Lombok on Two Wheels">
+    <meta property="og:description" content="Experience the best biking adventures in Lombok with professional guides and top-quality equipment. Discover scenic routes and beautiful landscapes.">
+    <meta property="og:image" content="<?= base_url('assets/themes/img/Logo.png') ?>">
+    <meta property="og:url" content="<?= current_url() ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Lombok Biking Tour">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Lombok Biking Tour - Explore Lombok on Two Wheels">
+    <meta name="twitter:description" content="Experience the best biking adventures in Lombok with professional guides and top-quality equipment.">
+    <meta name="twitter:image" content="<?= base_url('assets/themes/img/Logo.png') ?>"
+    
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
@@ -358,6 +372,23 @@
                     <h3 id="modalPackageTitle" class="mb-3"></h3>
                     <img src="" id="modalPackageImage" class="package-modal-img" alt="Package Image">
                     <div id="modalPackageDescription" class="ck-content" style="line-height: 1.8; color: #4a5568;"></div>
+                    
+                    <!-- Social Share Buttons -->
+                    <div class="text-center my-4">
+                        <p class="mb-2"><strong>Share this package:</strong></p>
+                        <button class="btn btn-success btn-sm" onclick="sharePackage('whatsapp')" title="Share on WhatsApp">
+                            <i class="fa fa-whatsapp"></i> WhatsApp
+                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="sharePackage('facebook')" title="Share on Facebook">
+                            <i class="fa fa-facebook"></i> Facebook
+                        </button>
+                        <button class="btn btn-info btn-sm" onclick="sharePackage('twitter')" title="Share on Twitter">
+                            <i class="fa fa-twitter"></i> Twitter
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="sharePackage('copy')" title="Copy Link">
+                            <i class="fa fa-link"></i> Copy Link
+                        </button>
+                    </div>
                     
                     <hr>
                     <h5 class="mt-4">Book This Tour</h5>
@@ -853,6 +884,46 @@
             } else {
                 // Fallback for browsers that don't support showPicker
                 input.focus();
+            }
+        }
+        
+        
+        // Share package function
+        function sharePackage(platform) {
+            var packageTitle = $('#modalPackageTitle').text();
+            var packageDesc = $('#modalPackageDescription').text().substring(0, 100) + '...';
+            var currentUrl = window.location.href;
+            var shareText = packageTitle + ' - ' + packageDesc;
+            
+            var shareUrl = '';
+            
+            switch(platform) {
+                case 'whatsapp':
+                    shareUrl = 'https://wa.me/?text=' + encodeURIComponent(shareText + ' ' + currentUrl);
+                    window.open(shareUrl, '_blank');
+                    break;
+                case 'facebook':
+                    shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(currentUrl);
+                    window.open(shareUrl, '_blank', 'width=600,height=400');
+                    break;
+                case 'twitter':
+                    shareUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText) + '&url=' + encodeURIComponent(currentUrl);
+                    window.open(shareUrl, '_blank', 'width=600,height=400');
+                    break;
+                case 'copy':
+                    // Copy to clipboard
+                    var textArea = document.createElement("textarea");
+                    textArea.value = currentUrl;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        alert('Link copied to clipboard!');
+                    } catch (err) {
+                        alert('Failed to copy link. Please copy manually: ' + currentUrl);
+                    }
+                    document.body.removeChild(textArea);
+                    break;
             }
         }
         
