@@ -205,9 +205,7 @@
                                 <?php if ($current_status != 1 && $current_status != 0 && $current_status != 6 && $current_status != 7 && $current_status != 2): ?>
                                 <th>Group</th>
                                 <?php endif; ?>
-                                <?php if ($current_status != 0): ?>
                                 <th>Image</th>
-                                <?php endif; ?>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -215,21 +213,21 @@
                             <?php foreach ($items as $item): ?>
                             <tr>
                                 <td><?= $item['kd_teks'] ?></td>
-                                <td><?= strip_tags($item['teks']) ?></td>
-                                <td><?= strip_tags(substr($item['other_teks'], 0, 50)) ?>...</td>
+                                <td><?= htmlspecialchars($item['teks']) ?></td>
+                                <td><?= htmlspecialchars(substr($item['other_teks'], 0, 50)) ?>...</td>
                                 <?php if ($current_status != 1 && $current_status != 5 && $current_status != 0 && $current_status != 6 && $current_status != 7 && $current_status != 2): ?>
                                 <td><span class="badge badge-<?= $item['status'] == 5 ? 'success' : 'secondary' ?>"><?= $item['status'] ?></span></td>
                                 <?php endif; ?>
                                 <?php if ($current_status != 1 && $current_status != 0 && $current_status != 6 && $current_status != 7 && $current_status != 2): ?>
                                 <td><?= $groupMap[$item['group_data']] ?? $item['group_data'] ?></td>
                                 <?php endif; ?>
-                                <?php if ($current_status != 0): ?>
                                 <td>
                                     <?php if ($item['img']): ?>
-                                        <img src="<?= base_url('assets/themes/images/' . $item['img']) ?>" height="40">
+                                        <img src="<?= base_url('assets/themes/images/' . $item['img']) ?>" height="40" class="img-thumbnail">
+                                    <?php else: ?>
+                                        <span class="text-muted">No image</span>
                                     <?php endif; ?>
                                 </td>
-                                <?php endif; ?>
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm mb-1 btn-edit-package" data-item='<?= htmlspecialchars(json_encode($item), ENT_QUOTES, 'UTF-8') ?>'><i class="fas fa-edit"></i></button>
                                     <?php if ($item['status'] == 5 || $item['status'] == 1 || $item['status'] == 6 || $item['status'] == 7 || $item['status'] == 2): ?> <!-- Allow delete for packages, gallery, pages, slideshow, testimony -->
@@ -269,8 +267,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="other_teks">Description / Value / Video URL (Other Teks)</label>
-                    <textarea class="form-control" id="other_teks" name="other_teks" rows="5"></textarea>
+                    <label for="other_teks">Description / Other Text</label>
+                    <textarea class="form-control" id="other_teks" name="other_teks" rows="4" required></textarea>
                     <small class="form-text text-muted">Use this for descriptions, secondary text, or extended content.</small>
                 </div>
 
@@ -539,12 +537,8 @@
                     $('#group-data-container').hide();
                 }
 
-                // Show/Hide Image based on item status (Basic Info = 0 hidden)
-                if (item.status == 0) {
-                     $('#image-form-group').hide();
-                } else {
-                     $('#image-form-group').show();
-                }
+                // Show/Hide Image based on item status (all types can have images now)
+                $('#image-form-group').show();
                 
                 // Image logic
                 $('#delete_img').val('0'); // Reset delete flag

@@ -441,17 +441,36 @@
     </div>
 
     <!-- About Section -->
+    <?php 
+        // Find Story01 from the value array
+        $story01 = null;
+        if (isset($value) && is_array($value)) {
+            foreach ($value as $item) {
+                if (isset($item['kd_teks']) && $item['kd_teks'] == 'Story01') {
+                    $story01 = $item;
+                    break;
+                }
+            }
+        }
+        
+        // Default values if Story01 not found
+        $aboutTitle = $story01['teks'] ?? 'About Lombok Biking Tour';
+        $aboutText = $story01['other_teks'] ?? 'Welcome to Lombok Biking Tour! Experience the amazing landscapes and culture of Lombok on two wheels.';
+        $aboutImage = $story01['img'] ?? 'about_us.png';
+    ?>
     <section class="page-section" id="about">
         <div class="container">
-            <h2 class="text-center mt-0">About Us</h2>
+            <h2 class="text-center mt-0"><?= htmlspecialchars($aboutTitle) ?></h2>
             <hr class="divider my-3">
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                    <img src="<?= base_url('assets/themes/images/about_us.png') ?>" class="img-fluid" alt="About Us">
+            <div class="row align-items-center">
+                <div class="col-md-6 col-sm-12 mb-3">
+                    <img src="<?= base_url('assets/themes/images/' . $aboutImage) ?>" class="img-fluid rounded shadow" alt="<?= htmlspecialchars($aboutTitle) ?>">
                 </div>
                 <div class="col-md-6 col-sm-12">
-                    <!-- About content will be loaded from database -->
-                    <p>Welcome to Lombok Biking Tour!</p>
+                    <div class="text-muted">
+                        <?= nl2br(htmlspecialchars($aboutText)) ?>
+                    </div>
+                    <a class="btn btn-primary btn-xl mt-4 js-scroll-trigger" href="#package">Explore Our Tours</a>
                 </div>
             </div>
         </div>
