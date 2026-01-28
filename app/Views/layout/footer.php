@@ -57,16 +57,16 @@
                             }
                         }
                     ?>
-                    <?php if ($linkYoutube): ?>
+                    <?php if (!empty($linkYoutube) && $linkYoutube != '-'): ?>
                         <a class="footer-social-link" href="<?= $linkYoutube ?>" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
                     <?php endif; ?>
-                    <?php if ($linkFb): ?>
+                    <?php if (!empty($linkFb) && $linkFb != '-'): ?>
                         <a class="footer-social-link" href="<?= $linkFb ?>" target="_blank" title="Facebook"><i class="fa fa-facebook"></i></a>
                     <?php endif; ?>
-                    <?php if ($linkInstagram): ?>
+                    <?php if (!empty($linkInstagram) && $linkInstagram != '-'): ?>
                         <a class="footer-social-link" href="<?= $linkInstagram ?>" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
                     <?php endif; ?>
-                    <?php if ($linkTwitter): ?>
+                    <?php if (!empty($linkTwitter) && $linkTwitter != '-'): ?>
                         <a class="footer-social-link" href="<?= $linkTwitter ?>" target="_blank" title="X (Twitter)"><i class="fa fa-twitter"></i></a>
                     <?php endif; ?>
                 </div>                
