@@ -447,38 +447,61 @@
         <div class="container">
             <h2 class="text-center mt-0">Testimonials</h2>
             <hr class="divider my-3">
-            <div class="row justify-content-center">
-                <?php
-                $testimony_count = 0;
-                if (isset($value) && is_array($value)) {
-                    foreach ($value as $item) {
-                        if (isset($item['status']) && $item['status'] == "2") {
-                            $test_name = $item['teks'] ?? 'Client';
-                            $test_content = $item['other_teks'] ?? '';
-                            $test_img = $item['img'] ?? 'default-avatar.png'; // Make sure you have a default or handle empty
-                            
-                            // Use default avatar if no image uploaded
-                            $img_src = $test_img ? base_url('assets/themes/images/' . $test_img) : 'https://via.placeholder.com/150?text=User';
-
-                            echo '<div class="col-lg-4 col-md-6 mb-4">';
-                            echo '  <div class="card h-100 border-0 shadow-sm">';
-                            echo '    <div class="card-body text-center">';
-                            echo '      <img src="' . $img_src . '" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;" alt="' . htmlspecialchars($test_name) . '">';
-                            echo '      <h5 class="card-title mb-1">' . htmlspecialchars($test_name) . '</h5>';
-                            echo '      <p class="card-text text-muted small"><i class="fa fa-quote-left mr-1"></i>' . htmlspecialchars($test_content) . '<i class="fa fa-quote-right ml-1"></i></p>';
-                            echo '    </div>';
-                            echo '  </div>';
-                            echo '</div>';
-                            $testimony_count++;
-                        }
+            <?php
+            $testimonies = [];
+            if (isset($value) && is_array($value)) {
+                foreach ($value as $item) {
+                    if (isset($item['status']) && $item['status'] == "2") {
+                        $testimonies[] = $item;
                     }
                 }
-                
-                if ($testimony_count == 0) {
-                    echo '<div class="col-lg-12 text-center text-muted"><p>No testimonials yet.</p></div>';
-                }
-                ?>
-            </div>
+            }
+            ?>
+
+            <?php if (count($testimonies) > 0): ?>
+                <div id="testimonialCarousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <?php foreach ($testimonies as $index => $item): ?>
+                            <?php
+                                $test_name = $item['teks'] ?? 'Client';
+                                $test_content = $item['other_teks'] ?? ''; // Allows HTML
+                                $test_img = $item['img'] ?? '';
+                                $img_src = $test_img ? base_url('assets/themes/images/' . $test_img) : 'https://via.placeholder.com/150?text=User';
+                            ?>
+                            <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-8 text-center">
+                                        <div class="d-flex justify-content-center mb-4">
+                                             <img src="<?= $img_src ?>" class="rounded-circle shadow" style="width: 120px; height: 120px; object-fit: cover;" alt="<?= htmlspecialchars($test_name) ?>">
+                                        </div>
+                                        <h5 class="mb-3 font-weight-bold"><?= htmlspecialchars($test_name) ?></h5>
+                                        <div class="testimonial-content text-muted">
+                                            <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
+                                            <div class="font-italic" style="font-size: 1.1rem; line-height: 1.8;">
+                                                <?= $test_content ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php if (count($testimonies) > 1): ?>
+                        <a class="carousel-control-prev" href="#testimonialCarousel" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon bg-primary rounded-circle" aria-hidden="true" style="padding: 20px;"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#testimonialCarousel" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon bg-primary rounded-circle" aria-hidden="true" style="padding: 20px;"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            <?php else: ?>
+                <div class="col-lg-12 text-center text-muted">
+                    <p>No testimonials yet.</p>
+                </div>
+            <?php endif; ?>
         </div>
     </section>
     

@@ -251,6 +251,11 @@
                 if (editorInstance) {
                     editorInstance.setData('');
                 }
+                
+                // Reset Labels (Default)
+                $('label[for="teks"]').text('Title (Teks)');
+                $('label[for="other_teks"]').text('Description (Other Teks)');
+                $('label.custom-file-label').html('Choose new image...');
 
                 $('#crudModal').modal('show');
             });
@@ -281,6 +286,11 @@
                 if (editorInstance) {
                     editorInstance.setData('');
                 }
+                
+                // Reset Labels
+                $('label[for="teks"]').text('Title (Teks)');
+                $('label[for="other_teks"]').text('Description (Other Teks)');
+                $('label.custom-file-label').html('Choose new image...');
 
                 $('#crudModal').modal('show');
             });
@@ -312,6 +322,10 @@
                     editorInstance.setData('');
                 }
 
+                // Reset Labels
+                $('label[for="teks"]').text('Title (Teks)');
+                $('label[for="other_teks"]').text('Description (Other Teks)');
+
                 $('#crudModal').modal('show');
             });
 
@@ -341,6 +355,11 @@
                 if (editorInstance) {
                     editorInstance.setData('');
                 }
+                
+                // Reset Labels
+                $('label[for="teks"]').text('Title (Teks)');
+                $('label[for="other_teks"]').text('Description (Other Teks)');
+                $('label.custom-file-label').html('Choose new image...');
 
                 $('#crudModal').modal('show');
             });
@@ -371,6 +390,11 @@
                 if (editorInstance) {
                     editorInstance.setData('');
                 }
+                
+                // Set Labels for Testimony
+                $('label[for="teks"]').text('Client Name');
+                $('label[for="other_teks"]').text('Testimony');
+                $('label.custom-file-label').html('Choose client photo...');
 
                 $('#crudModal').modal('show');
             });
