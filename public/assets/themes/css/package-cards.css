@@ -379,3 +379,7 @@
         padding: 0.75rem 1rem;
     }
 }
+/* Add vertical spacing to share buttons */
+.package-modal .modal-body .btn-sm {
+    margin: 0.25rem;
+}
