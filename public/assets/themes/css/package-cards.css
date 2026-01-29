@@ -383,3 +383,10 @@
 .package-modal .modal-body .btn-sm {
     margin: 0.25rem;
 }
+
+/* Fix label visibility in modal forms */
+.package-modal .modal-body label {
+    color: #2d3748;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
