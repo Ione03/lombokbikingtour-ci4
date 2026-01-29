@@ -83,6 +83,10 @@
     <script src="<?= base_url('assets/themes/vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= base_url('assets/themes/vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
     <script src="<?= base_url('assets/themes/js/creative.js') ?>"></script>
+    
+    <!-- Media Embed Handler for CKEditor -->
+    <script src="<?= base_url('assets/js/media-embed-handler.js') ?>"></script>
+    
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fa fa-angle-up"></i>

@@ -764,7 +764,7 @@
                         
                         <?php if ($addr_email): ?>
                         <div class="mb-4">
-                            <a href="mailto:<?= $addr_email_other ?>" class="btn-link d-block">
+                            <a href="mailto:<?= $addr_email ?>" class="btn-link d-block">
                                 <i class="fa fa-envelope fa-2x mb-2 text-primary"></i>
                                 <p><?= $addr_email ?></p>
                             </a>
@@ -773,9 +773,9 @@
                         
                         <?php if ($addr_location): ?>
                         <div class="mb-4">
-                            <a href="<?= $addr_location_other ?>" target="_blank" class="btn-link d-block">
+                            <a href="#contact" class="btn-link d-block ">
                                 <i class="fa fa-map-marker fa-2x mb-2 text-primary"></i>
-                                <p><?= $addr_location ?></p>
+                                <span clas="nav-link js-scroll-trigger"> <?= $addr_location ?></span>   
                             </a>
                         </div>
                         <?php endif; ?>
@@ -794,6 +794,9 @@
     <script src="<?= base_url('assets/themes/vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
     <script src="<?= base_url('assets/themes/vendor/magnific-popup/jquery.magnific-popup.min.js') ?>"></script>
     <script src="<?= base_url('assets/themes/js/creative.js') ?>"></script>
+    
+    <!-- Media Embed Handler for CKEditor -->
+    <script src="<?= base_url('assets/js/media-embed-handler.js') ?>"></script>
     
     <!-- Moment.js for date formatting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
@@ -911,9 +914,12 @@
         // Share package function
         function sharePackage(platform) {
             var packageTitle = $('#modalPackageTitle').text();
+            var packageId = $('#modalPackageTitle').data('package-id') || 'N/A';
             var packageDesc = $('#modalPackageDescription').text().substring(0, 100) + '...';
             var currentUrl = window.location.href;
-            var shareText = packageTitle + ' - ' + packageDesc;
+            
+            // Include package number and title in share text
+            var shareText = 'Package #' + packageId + ': ' + packageTitle + ' - ' + packageDesc;
             
             var shareUrl = '';
             
@@ -931,20 +937,53 @@
                     window.open(shareUrl, '_blank', 'width=600,height=400');
                     break;
                 case 'copy':
-                    // Copy to clipboard
-                    var textArea = document.createElement("textarea");
-                    textArea.value = currentUrl;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    try {
-                        document.execCommand('copy');
-                        alert('Link copied to clipboard!');
-                    } catch (err) {
-                        alert('Failed to copy link. Please copy manually: ' + currentUrl);
+                    // Copy to clipboard using modern Clipboard API with fallback
+                    var textToCopy = shareText + ' ' + currentUrl;
+                    
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        // Modern Clipboard API
+                        navigator.clipboard.writeText(textToCopy).then(function() {
+                            alert('Link copied to clipboard!');
+                        }).catch(function(err) {
+                            // Fallback to textarea method
+                            copyTextFallback(textToCopy);
+                        });
+                    } else {
+                        // Fallback for older browsers
+                        copyTextFallback(textToCopy);
                     }
-                    document.body.removeChild(textArea);
                     break;
             }
+        }
+        
+        // Fallback copy function for older browsers
+        function copyTextFallback(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.width = "2em";
+            textArea.style.height = "2em";
+            textArea.style.padding = "0";
+            textArea.style.border = "none";
+            textArea.style.outline = "none";
+            textArea.style.boxShadow = "none";
+            textArea.style.background = "transparent";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                var successful = document.execCommand('copy');
+                if (successful) {
+                    alert('Link copied to clipboard!');
+                } else {
+                    alert('Failed to copy link. Please copy manually: ' + text);
+                }
+            } catch (err) {
+                alert('Failed to copy link. Please copy manually: ' + text);
+            }
+            document.body.removeChild(textArea);
         }
         
         // Initialize WhatsApp booking
