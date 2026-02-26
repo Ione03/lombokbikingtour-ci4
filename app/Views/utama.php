@@ -438,7 +438,7 @@
                     <form id="bookingForm">
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="bikeType">Bike Type</label>
+                                <label style="color: #333 !important;" for="bikeType">Bike Type</label>
                                 <select id="bikeType" class="form-control">
                                     <option>Mountain Bike</option>
                                     <option>Road Bike</option>
@@ -447,20 +447,20 @@
                                 </select>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="bikeNumber">Number of Bikes</label>
+                                <label style="color: #333 !important;" for="bikeNumber">Number of Bikes</label>
                                 <input type="number" class="form-control" id="bikeNumber" min="1" value="1" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="bookNote">Note</label>
+                            <label style="color: #333 !important;" for="bookNote">Note</label>
                             <textarea class="form-control" id="bookNote" rows="3" placeholder="Additional requirements..."></textarea>
                         </div>
                         
                         <!-- Captcha for Booking Modal -->
                         <div class="form-group">
-                            <label>Verify you are human</label>
+                            <label style="color: #333 !important;">Verify you are human</label>
                             <div class="input-group">
-                                <div class="input-group-prepend">
+                                <div class="input-group-prepend" style="color: white !important" >
                                     <span class="input-group-text" id="modal-captcha-question"></span>
                                 </div>
                                 <input type="number" class="form-control" id="modal-captcha" placeholder="Enter result" required>
