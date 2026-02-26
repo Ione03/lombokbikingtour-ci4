@@ -598,7 +598,7 @@
                                         <div class="testimonial-content text-muted">
                                             <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
                                             <div class="font-italic ck-content" style="font-size: 1.1rem; line-height: 1.8;">
-                                                <?= $test_content ?>
+                                                <?= html_entity_decode($test_content) ?>
                                             </div>
                                         </div>
                                     </div>
