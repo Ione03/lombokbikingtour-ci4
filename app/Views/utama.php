@@ -358,39 +358,45 @@
             </div>
             
             <div class="row package-items">
-                <?php if (isset($value) && is_array($value)): ?>
-                    <?php foreach ($value as $item): ?>
-                        <?php if (isset($item['status']) && $item['status'] == "5"): ?>
-                        <?php
-                            $tmp = $item['other_teks'] ?? '';
-                            $arr = explode(" ", $tmp);
-                            $tmp_text = implode(' ', array_slice($arr, 0, 40));
-                        ?>
-                        <div class="col-sm-6 col-lg-4 mb-4">
-                            <div class="card package-card" 
-                                 data-toggle="modal" 
-                                 data-target="#packageModal"
-                                 data-package-id="<?= $item['kd_teks'] ?>"
-                                 data-package-title="<?= htmlspecialchars($item['teks']) ?>"
-                                 data-package-description="<?= htmlspecialchars($item['other_teks'] ?? '') ?>"
-                                 data-package-image="<?= base_url('assets/themes/images/' . $item['img']) ?>">
-                                <div class="package-card-img-container">
-                                    <img src="<?= base_url('assets/themes/images/' . $item['img']) ?>" class="package-card-img" alt="<?= htmlspecialchars($item['teks']) ?>">
-                                    <span class="package-badge">#<?= $item['kd_teks'] ?></span>
-                                </div>
-                                <div class="card-body ck-content">
-                                    <h5 class="card-title"><?= $item['teks'] ?></h5>
-                                    <p class="card-text"><?= $tmp_text ?>...</p>
-                                    <button class="btn btn-view-details">View Details</button>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-muted"><i class="fa fa-clock-o"></i> Updated <span class="human-date" data-date="<?= $item['last_update'] ?? '' ?>"><?= $item['last_update'] ?? 'recently' ?></span></small>
-                                </div>
-                            </div>
+                <?php
+                // Collect packages and shuffle for random order
+                $packages = [];
+                if (isset($value) && is_array($value)) {
+                    foreach ($value as $item) {
+                        if (isset($item['status']) && $item['status'] == "5") {
+                            $packages[] = $item;
+                        }
+                    }
+                }
+                shuffle($packages);
+                foreach ($packages as $item):
+                    $tmp = $item['other_teks'] ?? '';
+                    $arr = explode(" ", $tmp);
+                    $tmp_text = implode(' ', array_slice($arr, 0, 40));
+                ?>
+                <div class="col-sm-6 col-lg-4 mb-4">
+                    <div class="card package-card" 
+                         data-toggle="modal" 
+                         data-target="#packageModal"
+                         data-package-id="<?= $item['kd_teks'] ?>"
+                         data-package-title="<?= htmlspecialchars($item['teks']) ?>"
+                         data-package-description="<?= htmlspecialchars($item['other_teks'] ?? '') ?>"
+                         data-package-image="<?= base_url('assets/themes/images/' . $item['img']) ?>">
+                        <div class="package-card-img-container">
+                            <img src="<?= base_url('assets/themes/images/' . $item['img']) ?>" class="package-card-img" alt="<?= htmlspecialchars($item['teks']) ?>">
+                            <span class="package-badge">#<?= $item['kd_teks'] ?></span>
                         </div>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                        <div class="card-body ck-content">
+                            <h5 class="card-title"><?= $item['teks'] ?></h5>
+                            <p class="card-text"><?= $tmp_text ?>...</p>
+                            <button class="btn btn-view-details">View Details</button>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted"><i class="fa fa-clock-o"></i> Updated <span class="human-date" data-date="<?= $item['last_update'] ?? '' ?>"><?= $item['last_update'] ?? 'recently' ?></span></small>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
@@ -430,10 +436,6 @@
                     <hr>
                     <h5 class="mt-4">Book This Tour</h5>
                     <form id="bookingForm">
-                        <div class="form-group">
-                            <label for="bookDate">Date of Tour</label>
-                            <input type="date" class="form-control" id="bookDate" onkeydown="return false;" onclick="openDatePicker(this)" style="cursor: pointer; max-width: 250px;" required>
-                        </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="bikeType">Bike Type</label>
@@ -988,7 +990,6 @@
         
         // Initialize WhatsApp booking
         function sendBookingWA() {
-            var date = $('#bookDate').val();
             var bikeType = $('#bikeType').val();
             var bikeNumber = $('#bikeNumber').val();
             var note = $('#bookNote').val();
@@ -996,11 +997,6 @@
             var packageId = $('#modalPackageTitle').data('package-id') || 'N/A';
             var captchaInput = parseInt($('#modal-captcha').val());
             var captchaAnswer = parseInt($('#modal-captcha-answer').val());
-            
-            if (!date) {
-                alert('Please select a date.');
-                return;
-            }
             
             // Validate Captcha
             if (isNaN(captchaInput) || captchaInput !== captchaAnswer) {
@@ -1011,7 +1007,6 @@
             var text = "Hi, I would like to book a tour:\n" +
                        "Package ID: " + packageId + "\n" +
                        "Package: " + packageTitle + "\n" +
-                       "Date: " + date + "\n" +
                        "Bike Type: " + bikeType + "\n" +
                        "Number of Bikes: " + bikeNumber + "\n" +
                        "Note: " + note;
