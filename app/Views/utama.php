@@ -163,7 +163,15 @@
         .contact-info a.btn-link:hover {
             color: #d32f2f;
         }
+        .package-modal-img {
+            /* width: 100%; */
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
     </style>
+
     
 
 </head>
@@ -403,17 +411,19 @@
     
     <!-- Package Detail Modal -->
     <div class="modal fade package-modal" id="packageModal" tabindex="-1" role="dialog" aria-labelledby="packageModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="packageModalLabel">Package Details</h5>
+                    <h5 class="modal-title" id="packageModalLabel">
+                        <span id="modalPackageTitle"></span>
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <h3 id="modalPackageTitle" class="mb-3"></h3>
                     <img src="" id="modalPackageImage" class="package-modal-img" alt="Package Image">
+
                     <div id="modalPackageDescription" class="ck-content" style="line-height: 1.8; color: #4a5568;"></div>
                     
                     <!-- Social Share Buttons -->
@@ -434,7 +444,7 @@
                     </div>
                     
                     <hr>
-                    <h5 class="mt-4">Book This Tour</h5>
+                    <h5 class="mt-4">Book This Package:</h5>
                     <form id="bookingForm">
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -456,24 +466,28 @@
                             <textarea class="form-control" id="bookNote" rows="3" placeholder="Additional requirements..."></textarea>
                         </div>
                         
-                        <!-- Captcha for Booking Modal -->
-                        <div class="form-group">
-                            <label style="color: #333 !important;">Verify you are human</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend" style="color: white !important" >
-                                    <span class="input-group-text" id="modal-captcha-question"></span>
-                                </div>
-                                <input type="number" class="form-control" id="modal-captcha" placeholder="Enter result" required>
-                                <input type="hidden" id="modal-captcha-answer">
-                            </div>
-                        </div>
+
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" onclick="sendBookingWA()">
-                        <i class="fa fa-whatsapp"></i> Book via WhatsApp
-                    </button>
+                <div class="modal-footer flex-wrap" style="height:auto; gap: 0.5rem;">
+                    <!-- Captcha: left on desktop, bottom on mobile -->
+                    <div class="form-group mb-0 mr-auto d-flex align-items-center order-1 order-md-1 w-100 w-md-auto">
+                        <label style="color: #333 !important; white-space: nowrap;" class="mb-0 mr-2">Captcha</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend" style="color: white !important">
+                                <span class="input-group-text" id="modal-captcha-question"></span>
+                            </div>
+                            <input type="number" class="form-control" id="modal-captcha" placeholder="Enter result" required>
+                            <input type="hidden" id="modal-captcha-answer">
+                        </div>
+                    </div>
+                    <!-- Buttons: right on desktop, top on mobile -->
+                    <div class="d-flex order-2 order-md-2 w-100 w-md-auto justify-content-center" style="gap: 0.5rem;">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" onclick="sendBookingWA()">
+                            <i class="fa fa-whatsapp"></i> Book via WhatsApp
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -724,7 +738,7 @@
                             
                             <!-- Captcha for Contact Form -->
                             <div class="col-md-12 col-sm-12 mb-3">
-                                <label class="text-white small mb-1" style="display:block;">Verify you are human:</label>
+                                <label class="text-white small mb-1" style="display:block; color: #333 !important;">Captcha:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="captcha-question" style="background:#d32f2f; color:white; min-width:80px; justify-content:center;">? + ?</span>
@@ -885,7 +899,6 @@
                 modal.find('#modalPackageDescription').html(packageDescription);
                 
                 modal.find('#modalPackageImage').attr('src', packageImage);
-                modal.find('.modal-title').text('Package #' + packageId + ' Details');
             });
             
             // Add scroll hint animation when modal is shown
@@ -992,7 +1005,7 @@
         function sendBookingWA() {
             var bikeType = $('#bikeType').val();
             var bikeNumber = $('#bikeNumber').val();
-            var note = $('#bookNote').val();
+            var note = $('#bookNote').val() || '-';
             var packageTitle = $('#modalPackageTitle').text();
             var packageId = $('#modalPackageTitle').data('package-id') || 'N/A';
             var captchaInput = parseInt($('#modal-captcha').val());
