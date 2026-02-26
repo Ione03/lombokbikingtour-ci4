@@ -1024,13 +1024,12 @@
                        "Number of Bikes: " + bikeNumber + "\n" +
                        "Note: " + note;
             
-            var waNumber = "628123456789"; 
+            var waNumber = "6281917269380"; 
             if ($('#waNumber2').length && $('#waNumber2').val()) {
                 waNumber = $('#waNumber2').val();
             }
             
-            var url = "https://api.whatsapp.com/send?phone=" + waNumber + "&text=" + encodeURIComponent(text);
-            window.open(url, '_blank');
+            openWhatsApp(waNumber, text);
             
             // Regenerate captcha
             generateCaptcha();
@@ -1104,14 +1103,26 @@
         });
 
         // Custom Functions
+        function openWhatsApp(waNumber, waText) {
+            var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            if (isMobile) {
+                // 2. Open WhatsApp in Mobile
+                // window.open("https://api.whatsapp.com/send?phone=" + waNumber + "&text=" + encodeURIComponent(waText), "_blank");
+                window.open("https://wa.me/" + waNumber + "?text=" + encodeURIComponent(waText), "_blank");
+            } else {
+                // 1. Open WhatsApp in web
+                window.open("https://web.whatsapp.com/send?phone=" + waNumber + "&text=" + encodeURIComponent(waText), "_blank");
+            }
+        }
+
         function openWA() {
             var number = document.getElementById("waNumber").value;
-            window.open("https://api.whatsapp.com/send?phone=" + number + "&text=Hi, I contacted you through your website.", "_blank");
+            openWhatsApp(number, "Hi, I contacted you through your website.");
         }
         
         function openWA2() {
             var number = document.getElementById("waNumber2").value;
-            window.open("https://api.whatsapp.com/send?phone=" + number + "&text=Hi, I contacted you through your website.", "_blank");
+            openWhatsApp(number, "Hi, I contacted you through your website.");
         }
         
         function sendFeedback() {
@@ -1149,13 +1160,12 @@
                          "Subject: " + subject + "\n" +
                          "Message: " + message;
             
-            var waNumber = "628123456789"; 
+            var waNumber = "6281917269380"; 
             if ($('#waNumber2').length && $('#waNumber2').val()) {
                 waNumber = $('#waNumber2').val();
             }
             
-            // Open WhatsApp
-            window.open("https://api.whatsapp.com/send?phone=" + waNumber + "&text=" + encodeURIComponent(waText), "_blank");
+            openWhatsApp(waNumber, waText);
             
             // Reset form and regenerate captcha
             $('#form_feedback')[0].reset();
