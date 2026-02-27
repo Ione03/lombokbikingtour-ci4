@@ -400,7 +400,7 @@
                             <button class="btn btn-view-details">View Details</button>
                         </div>
                         <div class="card-footer">
-                            <small class="text-muted"><i class="fa fa-clock-o"></i> Updated <span class="human-date" data-date="<?= $item['last_update'] ?? '' ?>"><?= $item['last_update'] ?? 'recently' ?></span></small>
+                            <small class="text-muted"><i class="fa fa-clock-o"></i> Updated : <span class="human-date" data-date="<?= $item['last_update'] ?? '' ?>"><?= $item['last_update'] ?? 'recently' ?></span></small>
                         </div>
                     </div>
                 </div>
@@ -1147,7 +1147,7 @@
             
             // Validate Captcha
             if (isNaN(captchaInput) || captchaInput !== captchaAnswer) {
-                alert('Access Denied: Incorrect Captcha Answer! Please try again.');
+                alert('Incorrect Captcha Answer! Please try again.');
                 $('#cf-captcha').addClass('is-invalid');
                 return;
             }
@@ -1245,7 +1245,7 @@
                                 '            <button class="btn btn-view-details">View Details</button>' +
                                 '        </div>' +
                                 '        <div class="card-footer">' +
-                                '            <small class="text-muted"><i class="fa fa-clock-o"></i> Updated <span class="human-date" data-date="' + (value.last_update || '') + '">' + (value.last_update || 'recently') + '</span></small>' +
+                                '            <small class="text-muted"><i class="fa fa-clock-o"></i> Updated : <span class="human-date" data-date="' + (value.last_update || '') + '">' + (value.last_update || 'recently') + '</span></small>' +
                                 '        </div>' +
                                 '    </div>' +
                                 '</div>';
